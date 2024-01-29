@@ -1,15 +1,25 @@
-const express = require('express');
-const dotenv = require('dotenv');
+const express = require("express");
+const helmet = require("helmet");
+const morgan = require("morgan");
+const connectToDB = require("./config/database");
+require("dotenv").config();
 
-dotenv.config();
+const loginRoutes = require("./routes/loginRoutes");
 
 const app = express();
-const port = process.env.PORT;
- 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-});
 
-app.listen(port, () => {
-  console.log(`[server]: Server is running at http://localhost:${port}`);
-});
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(helmet());
+app.use(morgan("combined"));
+
+app.use("/api", loginRoutes);
+
+const port = process.env.PORT ;
+connectToDB()
+  .then(() =>
+    app.listen(port, () =>
+      console.log(`Server running on http://localhost:${port}`)
+    )
+  )
+  .catch((err) => console.log(err));
