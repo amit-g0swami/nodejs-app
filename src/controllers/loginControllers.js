@@ -1,20 +1,21 @@
 const User = require("../models/User");
 
+
 module.exports.login = async (req, res) => {
-    const { email, password } = req.body;
-    try {
-      console.log(email, password)
-      const user = await User.findOne({ email });
-      if (!user) {
-        return res.status(401).json({ error: "Invalid credentials" });
-      }
-      if (password !== user.password) {
-        return res.status(401).json({ error: "Invalid credentials" });
-      }
-      res.status(200).json({ user });
-      console.log("Login successful");
-    } catch (error) {
-      console.error("Login failed: ", error);
-      res.status(500).json({ error: "Failed to Login" });
+  try {
+    const { email, name } = req.body;
+    let existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: 'User already exists' });
     }
+    const newUser = new User({
+      email,
+      name,
+    });
+    await newUser.save();  
+    res.status(201).json({ message: 'User created successfully', user: newUser });
+  } catch (error) {
+    console.error('Error creating user:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
 };
