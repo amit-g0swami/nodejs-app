@@ -1,9 +1,10 @@
 const express = require("express");
 const helmet = require("helmet");
 const morgan = require("morgan");
-const connectToDB = require("./config/database");
 const cors = require("cors");
 
+const connectToDB = require("./config/database");
+const authMiddleware = require("./middleware/authMiddleware");
 require("dotenv").config();
 
 const loginRoutes = require("./routes/loginRoutes");
@@ -16,9 +17,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(helmet());
 app.use(morgan("combined"));
+app.use(authMiddleware);
 
-
-app.get("/", (req, res) => {
+app.get("/", (_req, res) => {
   res.send("Hello World!");
 });
 
@@ -26,6 +27,7 @@ app.use("/api", loginRoutes);
 app.use("/api", addressRoutes);
 
 const port = process.env.PORT ;
+
 connectToDB()
   .then(() =>
     app.listen(port, () =>
