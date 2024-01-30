@@ -7,6 +7,7 @@ const cors = require("cors");
 require("dotenv").config();
 
 const loginRoutes = require("./routes/loginRoutes");
+const addressRoutes = require("./routes/addressRoutes");
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api", loginRoutes);
+app.use("/api", addressRoutes);
 
 const port = process.env.PORT ;
 connectToDB()
