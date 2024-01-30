@@ -6,7 +6,7 @@ module.exports.login = async (req, res) => {
     const { email, name, createdAs } = req.body;
     let existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ message: 'User already exists' });
+      return res.status(400).json({ message: 'User already exists', user: existingUser });
     }
     const newUser = new User({
       email,
