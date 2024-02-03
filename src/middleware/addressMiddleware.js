@@ -5,18 +5,18 @@ const addressMiddleware = async (req, res, next) => {
   const sellerId = req.params.id;
 
   if (!sellerId) {
-    return res.status(400).json({ message: "Seller ID is required" });
+    return res.status(201).json({ message: "Seller ID is required" });
   }
 
   if (!mongoose.Types.ObjectId.isValid(sellerId)) {
-    return res.status(400).json({ message: "Invalid Seller ID format" });
+    return res.status(201).json({ message: "Invalid Seller ID format" });
   }
 
   try {
     const user = await User.findById(sellerId);
 
     if (!user) {
-      return res.status(404).json({ message: "Seller not found" });
+      return res.status(201).json({ message: "Seller not found" });
     }
 
     next();
