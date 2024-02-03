@@ -3,11 +3,6 @@ const User = require("../models/User");
 module.exports.login = async (req, res) => {
   try {
     const { email, name, createdAs } = req.body;
-    if (!createdAs || !email || !name) {
-      return res
-        .status(201)
-        .json({ message: "Invalid Credentials", user: null });
-    }
 
     const users = await User.find({ email });
 
