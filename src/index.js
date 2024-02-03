@@ -26,7 +26,7 @@ app.get("/", (_req, res) => {
 app.use("/api", loginRoutes);
 app.use("/api", addressRoutes);
 
-const port = process.env.PORT ;
+const port = process.env.PORT;
 
 connectToDB()
   .then(() =>

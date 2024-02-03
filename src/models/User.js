@@ -10,10 +10,10 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
-  createdAs : {
+  createdAs: {
     type: String,
     required: true,
-  }
+  },
 });
 
 module.exports = User = mongoose.model("user", UserSchema);
