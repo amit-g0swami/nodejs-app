@@ -8,7 +8,7 @@ module.exports.createAddress = async (req, res) => {
     }
     const sellerId = req.params.id;
     const existingAddress = await Address.findOne({ userId });
-    if (existingAddress && existingAddress.sellerId === sellerId) {
+    if (existingAddress) {
       return res.status(400).json({ message: "Address already exists" });
     }
     const newAddress = new Address({

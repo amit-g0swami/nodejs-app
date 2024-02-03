@@ -1,15 +1,29 @@
+const mongoose = require("mongoose");
 const User = require("../models/User");
 
 const addressMiddleware = async (req, res, next) => {
   const sellerId = req.params.id;
+
   if (!sellerId) {
-    return res.status(201).json({ message: "Seller ID is required" });
+    return res.status(400).json({ message: "Seller ID is required" });
   }
-  const users = await User.find({ _id: sellerId });
-  if (users.length === 0) {
-    return res.status(201).json({ message: "Not Authorized" });
+
+  if (!mongoose.Types.ObjectId.isValid(sellerId)) {
+    return res.status(400).json({ message: "Invalid Seller ID format" });
   }
-  next();
+
+  try {
+    const user = await User.findById(sellerId);
+
+    if (!user) {
+      return res.status(404).json({ message: "Seller not found" });
+    }
+
+    next();
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
 };
 
 module.exports = addressMiddleware;
