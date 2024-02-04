@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import User from "../models/User";
 import { Request, Response, NextFunction } from "express";
+import { CREATED_AS } from "../shared/shared.interface";
 
 export const customerMiddleware = async (
   req: Request,
@@ -20,7 +21,7 @@ export const customerMiddleware = async (
   try {
     const user = await User.findById(sellerId);
 
-    if (!user) {
+    if (!user || user.createdAs !== CREATED_AS.SELLER) {
       return res.status(201).json({ message: "Seller not found" });
     }
 

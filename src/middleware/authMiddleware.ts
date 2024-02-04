@@ -1,11 +1,7 @@
 import Joi, { ValidationError } from "joi";
 import { NextFunction, Request, Response } from "express";
 import { Error } from "mongoose";
-
-enum CREATED_AS {
-  CUSTOMER = "CUSTOMER",
-  SELLER = "SELLER",
-}
+import { CREATED_AS } from "../shared/shared.interface";
 
 const authSchema = Joi.object({
   email: Joi.string().email().required(),

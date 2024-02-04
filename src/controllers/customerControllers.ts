@@ -30,7 +30,7 @@ export const createAddress = async (req: Request, res: Response) => {
   }
 };
 
-export const getAddress = async (req, res) => {
+export const getAddress = async (req: Request, res: Response) => {
   try {
     const { userId } = req.body;
     if (!userId) {

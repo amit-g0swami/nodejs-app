@@ -1,0 +1,4 @@
+export enum CREATED_AS {
+  CUSTOMER = "CUSTOMER",
+  SELLER = "SELLER",
+}
