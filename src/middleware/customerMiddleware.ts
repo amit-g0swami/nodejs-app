@@ -1,7 +1,12 @@
-const mongoose = require("mongoose");
-const User = require("../models/User");
+import mongoose from "mongoose";
+import User from "../models/User";
+import { Request, Response, NextFunction } from "express";
 
-const customerMiddleware = async (req, res, next) => {
+export const customerMiddleware = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const sellerId = req.params.id;
 
   if (!sellerId) {
@@ -25,5 +30,3 @@ const customerMiddleware = async (req, res, next) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
-
-module.exports = customerMiddleware;

@@ -1,6 +1,7 @@
-const User = require("../models/User");
+import User from "../models/User";
+import { Request, Response } from "express";
 
-module.exports.login = async (req, res) => {
+export const login = async (req: Request, res: Response) => {
   try {
     const { email, name, createdAs } = req.body;
 
@@ -19,7 +20,7 @@ module.exports.login = async (req, res) => {
     }
 
     if (users.length === 1) {
-      if (users.filter((user) => user.createdAs !== createdAs)) {
+      if (users.some((user) => user.createdAs !== createdAs)) {
         const newUser = new User({
           email,
           name,

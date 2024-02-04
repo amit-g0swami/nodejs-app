@@ -1,6 +1,7 @@
-const Address = require("../models/Address");
+import Address from "../models/Address";
+import { Request, Response } from "express";
 
-module.exports.createAddress = async (req, res) => {
+export const createAddress = async (req: Request, res: Response) => {
   try {
     const { streetAddress, city, state, zipCode, userId } = req.body;
     if (!streetAddress || !city || !state || !zipCode || !userId) {
@@ -29,7 +30,7 @@ module.exports.createAddress = async (req, res) => {
   }
 };
 
-module.exports.getAddress = async (req, res) => {
+export const getAddress = async (req, res) => {
   try {
     const { userId } = req.body;
     if (!userId) {

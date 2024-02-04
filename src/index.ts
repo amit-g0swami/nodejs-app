@@ -1,14 +1,13 @@
-const express = require("express");
-const helmet = require("helmet");
-const morgan = require("morgan");
-const cors = require("cors");
+import express from "express";
+import helmet from "helmet";
+import morgan from "morgan";
+import cors from "cors";
+import dotenv from "dotenv";
+import authRoutes from "./routes/authRoutes";
+import customerRoutes from "./routes/customerRoutes";
+import { connectToDB } from "./config/database";
 
-const connectToDB = require("./config/database");
-require("dotenv").config();
-
-const authRoutes = require("./routes/authRoutes");
-const customerRoutes = require("./routes/customerRoutes");
-
+dotenv.config();
 const app = express();
 
 app.use(cors());
@@ -24,7 +23,7 @@ app.get("/", (_req, res) => {
 app.use("/api", authRoutes);
 app.use("/api", customerRoutes);
 
-const port = process.env.PORT;
+const port = process.env.PORT || 8000;
 
 connectToDB()
   .then(() =>
