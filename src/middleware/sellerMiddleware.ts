@@ -2,7 +2,17 @@ import mongoose from "mongoose";
 import User from "../models/User";
 import Joi, { ValidationError } from "joi";
 import { NextFunction, Request, Response } from "express";
-import { CREATED_AS, PAYMENT_TYPE } from "../shared/shared.interface";
+import {
+  CREATED_AS,
+  ERROR_MESSAGE,
+  HTTP_STATUS_CODE,
+  PAYMENT_TYPE,
+} from "../types/shared.interface";
+import {
+  ISellerDocument,
+  ISellerResponse,
+  SELLER_MESSAGE,
+} from "../types/seller.interface";
 
 const orderSchema = Joi.object({
   buyerDetails: Joi.object({
@@ -47,35 +57,42 @@ const orderSchema = Joi.object({
   }).required(),
 });
 
+const sellerIdSchema = Joi.object({
+  id: Joi.string().required(),
+});
+
 export const sellerMiddleware = async (
   req: Request,
-  res: Response,
+  res: Response<ISellerResponse<ISellerDocument>>,
   next: NextFunction
 ) => {
-  const sellerId = req.params.id;
-
-  if (!sellerId) {
-    return res.status(201).json({ message: "Seller ID is required" });
-  }
-
-  if (!mongoose.Types.ObjectId.isValid(sellerId)) {
-    return res.status(201).json({ message: "Invalid Seller ID format" });
-  }
-
-  const user = await User.findById(sellerId);
-  if (!user || user.createdAs !== CREATED_AS.SELLER) {
-    return res.status(201).json({ message: "Seller not found" });
-  }
-
   try {
+    const sellerId = req.params.id;
+
     await orderSchema.validateAsync(req.body, { abortEarly: false });
+    await sellerIdSchema.validateAsync(req.params, { abortEarly: false });
+
+    if (!mongoose.Types.ObjectId.isValid(sellerId)) {
+      return res
+        .status(HTTP_STATUS_CODE.CREATED)
+        .json({ message: SELLER_MESSAGE.INVALID_SELLER_ID });
+    }
+
+    const user = await User.findById(sellerId);
+    if (!user || user.createdAs !== CREATED_AS.SELLER) {
+      return res
+        .status(HTTP_STATUS_CODE.CREATED)
+        .json({ message: SELLER_MESSAGE.SELLER_NOT_FOUND });
+    }
+
     next();
   } catch (error: Error | any) {
     const validationErrors = error.details.map(
       (detail: ValidationError) => detail.message
     );
-    return res
-      .status(400)
-      .json({ message: "Validation error", errors: validationErrors });
+    return res.status(HTTP_STATUS_CODE.BAD_REQUEST).json({
+      message: ERROR_MESSAGE.VALIDATION_ERROR,
+      errors: validationErrors,
+    });
   }
 };

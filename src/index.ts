@@ -7,6 +7,7 @@ import authRoutes from "./routes/authRoutes";
 import customerRoutes from "./routes/customerRoutes";
 import sellerRoutes from "./routes/sellerRoutes";
 import connectToDB from "./config/database";
+import { END_POINT } from "./types/shared.interface";
 
 dotenv.config();
 const app = express();
@@ -21,9 +22,9 @@ app.get("/", (_req, res) => {
   res.send("Hello World!");
 });
 
-app.use("/api", authRoutes);
-app.use("/api", customerRoutes);
-app.use("/api", sellerRoutes);
+app.use(END_POINT.BASE_URL, authRoutes);
+app.use(END_POINT.BASE_URL, customerRoutes);
+app.use(END_POINT.BASE_URL, sellerRoutes);
 
 const port = process.env.PORT || 8000;
 

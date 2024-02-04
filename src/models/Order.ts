@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { PAYMENT_TYPE } from "../shared/shared.interface";
+import { PAYMENT_TYPE } from "../types/shared.interface";
 
 const { Schema } = mongoose;
 

@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { CREATED_AS } from "../shared/shared.interface";
+import { CREATED_AS } from "../types/shared.interface";
 
 const { Schema } = mongoose;
 

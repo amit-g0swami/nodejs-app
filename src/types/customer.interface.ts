@@ -1,0 +1,32 @@
+import { ValidationError } from "joi";
+import { ERROR_MESSAGE } from "./shared.interface";
+import { Document } from "mongoose";
+
+export enum CUSTOMER_MESSAGE {
+  ADDRESS_CREATED = "Address created successfully",
+  ADDRESS_FETCHED = "Address fetched successfully",
+  INVALID_SELLER_ID = "Invalid Seller ID",
+  SELLER_NOT_FOUND = "Seller not found",
+  ADDRESS_ALREADY_EXISTS = "Address already exists",
+  USER_ID_REQUIRED = "User ID is required",
+}
+
+export enum CUSTOMER_ROUTE {
+  GET_ADDRESS = "/address",
+  CREATE_ADDRESS = "/address/:id",
+}
+
+export interface ICustomerResponse<T> {
+  message: CUSTOMER_MESSAGE | ERROR_MESSAGE;
+  address?: T | T[] | null;
+  errors?: ValidationError;
+}
+
+export interface IAddressDocument extends Document {
+  streetAddress: string;
+  city: string;
+  state: string;
+  zipCode: number;
+  userId: string;
+  sellerId: string;
+}

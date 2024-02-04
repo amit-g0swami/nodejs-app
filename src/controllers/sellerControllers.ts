@@ -1,7 +1,16 @@
 import Order from "../models/Order";
 import { Request, Response } from "express";
+import { ERROR_MESSAGE, HTTP_STATUS_CODE } from "../types/shared.interface";
+import {
+  ISellerDocument,
+  ISellerResponse,
+  SELLER_MESSAGE,
+} from "../types/seller.interface";
 
-export const createOrder = async (req: Request, res: Response) => {
+export const createOrder = async (
+  req: Request,
+  res: Response<ISellerResponse<ISellerDocument>>
+) => {
   try {
     const sellerId = req.params.id;
 
@@ -24,10 +33,11 @@ export const createOrder = async (req: Request, res: Response) => {
 
     await newOrder.save();
     res
-      .status(201)
-      .json({ message: "Order created successfully", order: newOrder });
+      .status(HTTP_STATUS_CODE.CREATED)
+      .json({ message: SELLER_MESSAGE.ORDER_CREATED, order: newOrder });
   } catch (error) {
-    console.error("Error creating order:", error);
-    res.status(500).json({ message: "Internal server error" });
+    res
+      .status(HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR)
+      .json({ message: ERROR_MESSAGE.INTERNAL_SERVER_ERROR });
   }
 };

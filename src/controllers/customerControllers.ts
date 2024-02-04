@@ -1,7 +1,16 @@
 import Address from "../models/Address";
 import { Request, Response } from "express";
+import { ERROR_MESSAGE, HTTP_STATUS_CODE } from "../types/shared.interface";
+import {
+  CUSTOMER_MESSAGE,
+  IAddressDocument,
+  ICustomerResponse,
+} from "../types/customer.interface";
 
-export const createAddress = async (req: Request, res: Response) => {
+export const createAddress = async (
+  req: Request,
+  res: Response<ICustomerResponse<IAddressDocument>>
+) => {
   try {
     const { streetAddress, city, state, zipCode, userId } = req.body;
     const sellerId = req.params.id;
@@ -18,26 +27,35 @@ export const createAddress = async (req: Request, res: Response) => {
     await newAddress.save();
 
     res
-      .status(201)
-      .json({ message: "Address created successfully", address: newAddress });
+      .status(HTTP_STATUS_CODE.CREATED)
+      .json({ message: CUSTOMER_MESSAGE.ADDRESS_CREATED, address: newAddress });
   } catch (error) {
-    console.error("Error creating address:", error);
-    res.status(500).json({ message: "Internal server error" });
+    res
+      .status(HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR)
+      .json({ message: ERROR_MESSAGE.INTERNAL_SERVER_ERROR });
   }
 };
 
-export const getAddress = async (req: Request, res: Response) => {
+export const getAddress = async (
+  req: Request,
+  res: Response<ICustomerResponse<IAddressDocument>>
+) => {
   try {
     const { userId } = req.body;
 
     if (!userId) {
-      return res.status(400).json({ message: "User ID is required" });
+      return res
+        .status(HTTP_STATUS_CODE.BAD_REQUEST)
+        .json({ message: CUSTOMER_MESSAGE.USER_ID_REQUIRED });
     }
 
     const address = await Address.find({ userId });
-    res.status(200).json({ message: "Address fetched successfully", address });
+    res
+      .status(HTTP_STATUS_CODE.OK)
+      .json({ message: CUSTOMER_MESSAGE.ADDRESS_FETCHED, address });
   } catch (error) {
-    console.error("Error getting address:", error);
-    res.status(500).json({ message: "Internal server error" });
+    res
+      .status(HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR)
+      .json({ message: ERROR_MESSAGE.INTERNAL_SERVER_ERROR });
   }
 };

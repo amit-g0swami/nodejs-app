@@ -1,7 +1,12 @@
 import Joi, { ValidationError } from "joi";
 import { NextFunction, Request, Response } from "express";
 import { Error } from "mongoose";
-import { CREATED_AS } from "../shared/shared.interface";
+import {
+  CREATED_AS,
+  ERROR_MESSAGE,
+  HTTP_STATUS_CODE,
+} from "../types/shared.interface";
+import { IAuthResponse, IUserDocument } from "../types/auth.interface";
 
 const authSchema = Joi.object({
   email: Joi.string().email().required(),
@@ -13,7 +18,7 @@ const authSchema = Joi.object({
 
 export const authMiddleware = async (
   req: Request,
-  res: Response,
+  res: Response<IAuthResponse<IUserDocument>>,
   next: NextFunction
 ) => {
   try {
@@ -23,8 +28,9 @@ export const authMiddleware = async (
     const validationErrors = error.details.map(
       (detail: ValidationError) => detail.message
     );
-    return res
-      .status(400)
-      .json({ message: "Validation error", errors: validationErrors });
+    return res.status(HTTP_STATUS_CODE.BAD_REQUEST).json({
+      message: ERROR_MESSAGE.VALIDATION_ERROR,
+      errors: validationErrors,
+    });
   }
 };

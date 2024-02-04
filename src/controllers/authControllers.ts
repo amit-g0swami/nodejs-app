@@ -1,7 +1,16 @@
 import User from "../models/User";
 import { Request, Response } from "express";
+import { ERROR_MESSAGE, HTTP_STATUS_CODE } from "../types/shared.interface";
+import {
+  AUTH_MESSAGE,
+  IAuthResponse,
+  IUserDocument,
+} from "../types/auth.interface";
 
-export const createUser = async (req: Request, res: Response) => {
+export const createUser = async (
+  req: Request,
+  res: Response<IAuthResponse<IUserDocument>>
+) => {
   try {
     const { email, name, createdAs } = req.body;
 
@@ -15,8 +24,8 @@ export const createUser = async (req: Request, res: Response) => {
       });
       await newUser.save();
       return res
-        .status(201)
-        .json({ message: "User created successfully", user: newUser });
+        .status(HTTP_STATUS_CODE.CREATED)
+        .json({ message: AUTH_MESSAGE.USER_CREATED, user: newUser });
     }
 
     if (users.length === 1) {
@@ -28,23 +37,25 @@ export const createUser = async (req: Request, res: Response) => {
         });
         await newUser.save();
         return res
-          .status(201)
-          .json({ message: "User created successfully", user: newUser });
+          .status(HTTP_STATUS_CODE.CREATED)
+          .json({ message: AUTH_MESSAGE.USER_CREATED, user: newUser });
       } else {
         return res
-          .status(201)
-          .json({ message: "User already exists", user: users[0] });
+          .status(HTTP_STATUS_CODE.CREATED)
+          .json({ message: AUTH_MESSAGE.USER_ALREADY_EXISTS, user: users[0] });
       }
     }
 
     if (users.length >= 2) {
       const filteredUser = users.filter((user) => user.createdAs === createdAs);
-      return res
-        .status(201)
-        .json({ message: "User already exists", user: filteredUser[0] });
+      return res.status(HTTP_STATUS_CODE.CREATED).json({
+        message: AUTH_MESSAGE.USER_ALREADY_EXISTS,
+        user: filteredUser[0],
+      });
     }
   } catch (error) {
-    console.error("Error creating user:", error);
-    res.status(500).json({ message: "Internal server error" });
+    res
+      .status(HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR)
+      .json({ message: ERROR_MESSAGE.INTERNAL_SERVER_ERROR });
   }
 };
