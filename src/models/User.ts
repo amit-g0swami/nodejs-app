@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { CREATED_AS } from "../shared/shared.interface";
 
 const { Schema } = mongoose;
 
@@ -14,6 +15,7 @@ const UserSchema = new Schema({
   createdAs: {
     type: String,
     required: true,
+    enum: [CREATED_AS.CUSTOMER, CREATED_AS.SELLER],
   },
 });
 

@@ -4,14 +4,8 @@ import { Request, Response } from "express";
 export const createAddress = async (req: Request, res: Response) => {
   try {
     const { streetAddress, city, state, zipCode, userId } = req.body;
-    if (!streetAddress || !city || !state || !zipCode || !userId) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
     const sellerId = req.params.id;
-    const existingAddress = await Address.findOne({ userId });
-    if (existingAddress) {
-      return res.status(400).json({ message: "Address already exists" });
-    }
+
     const newAddress = new Address({
       userId,
       streetAddress,
@@ -20,7 +14,9 @@ export const createAddress = async (req: Request, res: Response) => {
       zipCode,
       sellerId,
     });
+
     await newAddress.save();
+
     res
       .status(201)
       .json({ message: "Address created successfully", address: newAddress });

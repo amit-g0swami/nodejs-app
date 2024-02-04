@@ -5,7 +5,8 @@ import cors from "cors";
 import dotenv from "dotenv";
 import authRoutes from "./routes/authRoutes";
 import customerRoutes from "./routes/customerRoutes";
-import { connectToDB } from "./config/database";
+import sellerRoutes from "./routes/sellerRoutes";
+import connectToDB from "./config/database";
 
 dotenv.config();
 const app = express();
@@ -22,6 +23,7 @@ app.get("/", (_req, res) => {
 
 app.use("/api", authRoutes);
 app.use("/api", customerRoutes);
+app.use("/api", sellerRoutes);
 
 const port = process.env.PORT || 8000;
 

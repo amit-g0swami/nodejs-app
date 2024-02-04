@@ -1,7 +1,19 @@
 import mongoose from "mongoose";
 import User from "../models/User";
+import Address from "../models/Address";
+import Joi, { ValidationError } from "joi";
 import { Request, Response, NextFunction } from "express";
 import { CREATED_AS } from "../shared/shared.interface";
+
+const customerSchema = Joi.object({
+  streetAddress: Joi.string().required(),
+  city: Joi.string().required(),
+  state: Joi.string().required(),
+  zipCode: Joi.string()
+    .pattern(/^\d{6}$/)
+    .required(),
+  userId: Joi.string().required(),
+});
 
 export const customerMiddleware = async (
   req: Request,
@@ -9,6 +21,7 @@ export const customerMiddleware = async (
   next: NextFunction
 ) => {
   const sellerId = req.params.id;
+  const { userId } = req.body;
 
   if (!sellerId) {
     return res.status(201).json({ message: "Seller ID is required" });
@@ -18,16 +31,27 @@ export const customerMiddleware = async (
     return res.status(201).json({ message: "Invalid Seller ID format" });
   }
 
+  const user = await User.findById(sellerId);
+
+  if (!user || user.createdAs !== CREATED_AS.SELLER) {
+    return res.status(201).json({ message: "Seller not found" });
+  }
+
+  const existingAddress = await Address.findOne({ userId });
+
+  if (existingAddress) {
+    return res.status(400).json({ message: "Address already exists" });
+  }
+
   try {
-    const user = await User.findById(sellerId);
-
-    if (!user || user.createdAs !== CREATED_AS.SELLER) {
-      return res.status(201).json({ message: "Seller not found" });
-    }
-
+    await customerSchema.validateAsync(req.body, { abortEarly: false });
     next();
   } catch (error) {
-    console.error("Error fetching user:", error);
-    return res.status(500).json({ message: "Internal server error" });
+    const validationErrors = error.details.map(
+      (detail: ValidationError) => detail.message
+    );
+    return res
+      .status(400)
+      .json({ message: "Validation error", errors: validationErrors });
   }
 };
