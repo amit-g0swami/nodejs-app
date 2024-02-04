@@ -6,8 +6,8 @@ const cors = require("cors");
 const connectToDB = require("./config/database");
 require("dotenv").config();
 
-const loginRoutes = require("./routes/loginRoutes");
-const addressRoutes = require("./routes/addressRoutes");
+const authRoutes = require("./routes/authRoutes");
+const customerRoutes = require("./routes/customerRoutes");
 
 const app = express();
 
@@ -21,8 +21,8 @@ app.get("/", (_req, res) => {
   res.send("Hello World!");
 });
 
-app.use("/api", loginRoutes);
-app.use("/api", addressRoutes);
+app.use("/api", authRoutes);
+app.use("/api", customerRoutes);
 
 const port = process.env.PORT;
 

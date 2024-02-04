@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const User = require("../models/User");
 
-const addressMiddleware = async (req, res, next) => {
+const customerMiddleware = async (req, res, next) => {
   const sellerId = req.params.id;
 
   if (!sellerId) {
@@ -26,4 +26,4 @@ const addressMiddleware = async (req, res, next) => {
   }
 };
 
-module.exports = addressMiddleware;
+module.exports = customerMiddleware;
