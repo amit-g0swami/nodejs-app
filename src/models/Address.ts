@@ -22,6 +22,7 @@ const AddressSchema = new Schema({
   zipCode: {
     type: Number,
     required: true,
+    validate: /^\d{6}$/,
   },
   sellerId: {
     type: String,
