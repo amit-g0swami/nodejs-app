@@ -29,9 +29,11 @@ export const createAddress = async (req: Request, res: Response) => {
 export const getAddress = async (req: Request, res: Response) => {
   try {
     const { userId } = req.body;
+
     if (!userId) {
       return res.status(400).json({ message: "User ID is required" });
     }
+
     const address = await Address.find({ userId });
     res.status(200).json({ message: "Address fetched successfully", address });
   } catch (error) {

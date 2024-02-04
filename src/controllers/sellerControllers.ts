@@ -1,9 +1,10 @@
-import { Request, Response } from "express";
 import Order from "../models/Order";
+import { Request, Response } from "express";
 
 export const createOrder = async (req: Request, res: Response) => {
   try {
     const sellerId = req.params.id;
+
     const {
       buyerDetails,
       orderPlaced,
@@ -20,6 +21,7 @@ export const createOrder = async (req: Request, res: Response) => {
       packageDetails,
       paymentDetails,
     });
+
     await newOrder.save();
     res
       .status(201)
