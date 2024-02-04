@@ -11,9 +11,9 @@ export enum AUTH_ROUTE {
   LOGIN = "/login",
 }
 
-export interface IAuthResponse<T> {
+export interface IAuthResponse {
   message: AUTH_MESSAGE | ERROR_MESSAGE;
-  user?: T | T[] | null;
+  user?: IUserDocument | IUserDocument[];
   errors?: ValidationError;
 }
 

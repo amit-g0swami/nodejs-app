@@ -6,7 +6,7 @@ import {
   ERROR_MESSAGE,
   HTTP_STATUS_CODE,
 } from "../types/shared.interface";
-import { IAuthResponse, IUserDocument } from "../types/auth.interface";
+import { IAuthResponse } from "../types/auth.interface";
 
 const authSchema = Joi.object({
   email: Joi.string().email().required(),
@@ -18,7 +18,7 @@ const authSchema = Joi.object({
 
 export const authMiddleware = async (
   req: Request,
-  res: Response<IAuthResponse<IUserDocument>>,
+  res: Response<IAuthResponse>,
   next: NextFunction
 ) => {
   try {

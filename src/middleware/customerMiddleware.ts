@@ -10,7 +10,6 @@ import {
 } from "../types/shared.interface";
 import {
   CUSTOMER_MESSAGE,
-  IAddressDocument,
   ICustomerResponse,
 } from "../types/customer.interface";
 
@@ -30,7 +29,7 @@ const sellerIdSchema = Joi.object({
 
 export const customerMiddleware = async (
   req: Request,
-  res: Response<ICustomerResponse<IAddressDocument>>,
+  res: Response<ICustomerResponse>,
   next: NextFunction
 ) => {
   try {

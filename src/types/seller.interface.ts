@@ -46,12 +46,6 @@ export enum SELLER_ROUTE {
   CREATE_ORDER = "/:id/order",
 }
 
-export interface ISellerResponse<T> {
-  message: SELLER_MESSAGE | ERROR_MESSAGE;
-  order?: T;
-  errors?: ValidationError;
-}
-
 export interface ISellerDocument extends Document {
   sellerId: string;
   orderDetails: Types.DocumentArray<IOrderDetail>;
@@ -59,4 +53,10 @@ export interface ISellerDocument extends Document {
   orderPlaced?: IOrderPlaced | null;
   packageDetails?: IPackageDetails | null;
   paymentDetails?: { paymentMode: PAYMENT_TYPE } | null;
+}
+
+export interface ISellerResponse {
+  message: SELLER_MESSAGE | ERROR_MESSAGE;
+  order?: ISellerDocument;
+  errors?: ValidationError;
 }

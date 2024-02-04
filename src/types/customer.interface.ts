@@ -16,12 +16,6 @@ export enum CUSTOMER_ROUTE {
   CREATE_ADDRESS = "/address/:id",
 }
 
-export interface ICustomerResponse<T> {
-  message: CUSTOMER_MESSAGE | ERROR_MESSAGE;
-  address?: T | T[] | null;
-  errors?: ValidationError;
-}
-
 export interface IAddressDocument extends Document {
   streetAddress: string;
   city: string;
@@ -29,4 +23,10 @@ export interface IAddressDocument extends Document {
   zipCode: number;
   userId: string;
   sellerId: string;
+}
+
+export interface ICustomerResponse {
+  message: CUSTOMER_MESSAGE | ERROR_MESSAGE;
+  address?: IAddressDocument | IAddressDocument[];
+  errors?: ValidationError;
 }

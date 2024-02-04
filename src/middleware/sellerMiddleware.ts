@@ -8,11 +8,7 @@ import {
   HTTP_STATUS_CODE,
   PAYMENT_TYPE,
 } from "../types/shared.interface";
-import {
-  ISellerDocument,
-  ISellerResponse,
-  SELLER_MESSAGE,
-} from "../types/seller.interface";
+import { ISellerResponse, SELLER_MESSAGE } from "../types/seller.interface";
 
 const orderSchema = Joi.object({
   buyerDetails: Joi.object({
@@ -63,7 +59,7 @@ const sellerIdSchema = Joi.object({
 
 export const sellerMiddleware = async (
   req: Request,
-  res: Response<ISellerResponse<ISellerDocument>>,
+  res: Response<ISellerResponse>,
   next: NextFunction
 ) => {
   try {

@@ -3,13 +3,12 @@ import { Request, Response } from "express";
 import { ERROR_MESSAGE, HTTP_STATUS_CODE } from "../types/shared.interface";
 import {
   CUSTOMER_MESSAGE,
-  IAddressDocument,
   ICustomerResponse,
 } from "../types/customer.interface";
 
 export const createAddress = async (
   req: Request,
-  res: Response<ICustomerResponse<IAddressDocument>>
+  res: Response<ICustomerResponse>
 ) => {
   try {
     const { streetAddress, city, state, zipCode, userId } = req.body;
@@ -38,7 +37,7 @@ export const createAddress = async (
 
 export const getAddress = async (
   req: Request,
-  res: Response<ICustomerResponse<IAddressDocument>>
+  res: Response<ICustomerResponse>
 ) => {
   try {
     const { userId } = req.body;
@@ -52,7 +51,7 @@ export const getAddress = async (
     const address = await Address.find({ userId });
     res
       .status(HTTP_STATUS_CODE.OK)
-      .json({ message: CUSTOMER_MESSAGE.ADDRESS_FETCHED, address });
+      .json({ message: CUSTOMER_MESSAGE.ADDRESS_FETCHED, address: address });
   } catch (error) {
     res
       .status(HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR)

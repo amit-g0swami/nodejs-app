@@ -1,15 +1,11 @@
 import User from "../models/User";
 import { Request, Response } from "express";
 import { ERROR_MESSAGE, HTTP_STATUS_CODE } from "../types/shared.interface";
-import {
-  AUTH_MESSAGE,
-  IAuthResponse,
-  IUserDocument,
-} from "../types/auth.interface";
+import { AUTH_MESSAGE, IAuthResponse } from "../types/auth.interface";
 
 export const createUser = async (
   req: Request,
-  res: Response<IAuthResponse<IUserDocument>>
+  res: Response<IAuthResponse>
 ) => {
   try {
     const { email, name, createdAs } = req.body;

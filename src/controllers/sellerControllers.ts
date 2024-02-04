@@ -1,15 +1,11 @@
 import Order from "../models/Order";
 import { Request, Response } from "express";
 import { ERROR_MESSAGE, HTTP_STATUS_CODE } from "../types/shared.interface";
-import {
-  ISellerDocument,
-  ISellerResponse,
-  SELLER_MESSAGE,
-} from "../types/seller.interface";
+import { ISellerResponse, SELLER_MESSAGE } from "../types/seller.interface";
 
 export const createOrder = async (
   req: Request,
-  res: Response<ISellerResponse<ISellerDocument>>
+  res: Response<ISellerResponse>
 ) => {
   try {
     const sellerId = req.params.id;
