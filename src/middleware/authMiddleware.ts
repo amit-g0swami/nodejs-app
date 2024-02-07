@@ -28,9 +28,10 @@ export const authMiddleware = async (
     const validationErrors = error.details.map(
       (detail: ValidationError) => detail.message
     );
-    return res.status(HTTP_STATUS_CODE.BAD_REQUEST).json({
+    return res.status(HTTP_STATUS_CODE.OK).json({
       message: ERROR_MESSAGE.VALIDATION_ERROR,
       errors: validationErrors,
+      status: HTTP_STATUS_CODE.BAD_REQUEST,
     });
   }
 };

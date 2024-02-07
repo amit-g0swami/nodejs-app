@@ -69,16 +69,18 @@ export const sellerMiddleware = async (
     await sellerIdSchema.validateAsync(req.params, { abortEarly: false });
 
     if (!mongoose.Types.ObjectId.isValid(sellerId)) {
-      return res
-        .status(HTTP_STATUS_CODE.CREATED)
-        .json({ message: SELLER_MESSAGE.INVALID_SELLER_ID });
+      return res.status(HTTP_STATUS_CODE.OK).json({
+        message: SELLER_MESSAGE.INVALID_SELLER_ID,
+        status: HTTP_STATUS_CODE.BAD_REQUEST,
+      });
     }
 
     const user = await User.findById(sellerId);
     if (!user || user.createdAs !== CREATED_AS.SELLER) {
-      return res
-        .status(HTTP_STATUS_CODE.CREATED)
-        .json({ message: SELLER_MESSAGE.SELLER_NOT_FOUND });
+      return res.status(HTTP_STATUS_CODE.OK).json({
+        message: SELLER_MESSAGE.SELLER_NOT_FOUND,
+        status: HTTP_STATUS_CODE.NOT_FOUND,
+      });
     }
 
     next();
@@ -86,9 +88,10 @@ export const sellerMiddleware = async (
     const validationErrors = error.details.map(
       (detail: ValidationError) => detail.message
     );
-    return res.status(HTTP_STATUS_CODE.BAD_REQUEST).json({
+    return res.status(HTTP_STATUS_CODE.OK).json({
       message: ERROR_MESSAGE.VALIDATION_ERROR,
       errors: validationErrors,
+      status: HTTP_STATUS_CODE.BAD_REQUEST,
     });
   }
 };

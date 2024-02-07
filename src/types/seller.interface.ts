@@ -1,5 +1,9 @@
 import { ValidationError } from "joi";
-import { ERROR_MESSAGE, PAYMENT_TYPE } from "./shared.interface";
+import {
+  ERROR_MESSAGE,
+  HTTP_STATUS_CODE,
+  PAYMENT_TYPE,
+} from "./shared.interface";
 import { Document, Types } from "mongoose";
 
 interface IOrderDetail {
@@ -59,4 +63,5 @@ export interface ISellerResponse {
   message: SELLER_MESSAGE | ERROR_MESSAGE;
   order?: ISellerDocument;
   errors?: ValidationError;
+  status?: HTTP_STATUS_CODE;
 }

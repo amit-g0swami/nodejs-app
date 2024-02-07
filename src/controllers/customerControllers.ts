@@ -25,13 +25,18 @@ export const createAddress = async (
 
     await newAddress.save();
 
-    res
-      .status(HTTP_STATUS_CODE.CREATED)
-      .json({ message: CUSTOMER_MESSAGE.ADDRESS_CREATED, address: newAddress });
+    res.status(HTTP_STATUS_CODE.CREATED).json({
+      message: CUSTOMER_MESSAGE.ADDRESS_CREATED,
+      address: newAddress,
+      status: HTTP_STATUS_CODE.CREATED,
+    });
   } catch (error) {
     res
-      .status(HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR)
-      .json({ message: ERROR_MESSAGE.INTERNAL_SERVER_ERROR });
+      .status(HTTP_STATUS_CODE.OK)
+      .json({
+        message: ERROR_MESSAGE.INTERNAL_SERVER_ERROR,
+        status: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+      });
   }
 };
 
@@ -43,18 +48,22 @@ export const getAddress = async (
     const { userId } = req.body;
 
     if (!userId) {
-      return res
-        .status(HTTP_STATUS_CODE.BAD_REQUEST)
-        .json({ message: CUSTOMER_MESSAGE.USER_ID_REQUIRED });
+      return res.status(HTTP_STATUS_CODE.OK).json({
+        message: CUSTOMER_MESSAGE.USER_ID_REQUIRED,
+        status: HTTP_STATUS_CODE.BAD_REQUEST,
+      });
     }
 
     const address = await Address.find({ userId });
-    res
-      .status(HTTP_STATUS_CODE.OK)
-      .json({ message: CUSTOMER_MESSAGE.ADDRESS_FETCHED, address: address });
+    res.status(HTTP_STATUS_CODE.OK).json({
+      message: CUSTOMER_MESSAGE.ADDRESS_FETCHED,
+      address: address,
+      status: HTTP_STATUS_CODE.OK,
+    });
   } catch (error) {
-    res
-      .status(HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR)
-      .json({ message: ERROR_MESSAGE.INTERNAL_SERVER_ERROR });
+    res.status(HTTP_STATUS_CODE.OK).json({
+      message: ERROR_MESSAGE.INTERNAL_SERVER_ERROR,
+      status: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+    });
   }
 };

@@ -1,5 +1,9 @@
 import { ValidationError } from "joi";
-import { CREATED_AS, ERROR_MESSAGE } from "./shared.interface";
+import {
+  CREATED_AS,
+  ERROR_MESSAGE,
+  HTTP_STATUS_CODE,
+} from "./shared.interface";
 import { Document } from "mongoose";
 
 export enum AUTH_MESSAGE {
@@ -15,6 +19,7 @@ export interface IAuthResponse {
   message: AUTH_MESSAGE | ERROR_MESSAGE;
   user?: IUserDocument | IUserDocument[];
   errors?: ValidationError;
+  status?: HTTP_STATUS_CODE;
 }
 
 export interface IUserDocument extends Document {

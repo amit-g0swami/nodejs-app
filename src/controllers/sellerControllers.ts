@@ -28,12 +28,17 @@ export const createOrder = async (
     });
 
     await newOrder.save();
-    res
-      .status(HTTP_STATUS_CODE.CREATED)
-      .json({ message: SELLER_MESSAGE.ORDER_CREATED, order: newOrder });
+    res.status(HTTP_STATUS_CODE.CREATED).json({
+      message: SELLER_MESSAGE.ORDER_CREATED,
+      order: newOrder,
+      status: HTTP_STATUS_CODE.CREATED,
+    });
   } catch (error) {
     res
-      .status(HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR)
-      .json({ message: ERROR_MESSAGE.INTERNAL_SERVER_ERROR });
+      .status(HTTP_STATUS_CODE.OK)
+      .json({
+        message: ERROR_MESSAGE.INTERNAL_SERVER_ERROR,
+        status: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+      });
   }
 };

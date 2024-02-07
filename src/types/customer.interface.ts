@@ -1,5 +1,5 @@
 import { ValidationError } from "joi";
-import { ERROR_MESSAGE } from "./shared.interface";
+import { ERROR_MESSAGE, HTTP_STATUS_CODE } from "./shared.interface";
 import { Document } from "mongoose";
 
 export enum CUSTOMER_MESSAGE {
@@ -7,7 +7,7 @@ export enum CUSTOMER_MESSAGE {
   ADDRESS_FETCHED = "Address fetched successfully",
   INVALID_SELLER_ID = "Invalid Seller ID",
   SELLER_NOT_FOUND = "Seller not found",
-  ADDRESS_ALREADY_EXISTS = "Address already exists",
+  ADDRESS_ALREADY_SUBMITTED = "Address already submitted",
   USER_ID_REQUIRED = "User ID is required",
 }
 
@@ -29,4 +29,5 @@ export interface ICustomerResponse {
   message: CUSTOMER_MESSAGE | ERROR_MESSAGE;
   address?: IAddressDocument | IAddressDocument[];
   errors?: ValidationError;
+  status?: HTTP_STATUS_CODE;
 }

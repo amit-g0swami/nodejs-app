@@ -21,7 +21,11 @@ export const createUser = async (
       await newUser.save();
       return res
         .status(HTTP_STATUS_CODE.CREATED)
-        .json({ message: AUTH_MESSAGE.USER_CREATED, user: newUser });
+        .json({
+          message: AUTH_MESSAGE.USER_CREATED,
+          user: newUser,
+          status: HTTP_STATUS_CODE.CREATED,
+        });
     }
 
     if (users.length === 1) {
@@ -32,13 +36,17 @@ export const createUser = async (
           createdAs,
         });
         await newUser.save();
-        return res
-          .status(HTTP_STATUS_CODE.CREATED)
-          .json({ message: AUTH_MESSAGE.USER_CREATED, user: newUser });
+        return res.status(HTTP_STATUS_CODE.CREATED).json({
+          message: AUTH_MESSAGE.USER_CREATED,
+          user: newUser,
+          status: HTTP_STATUS_CODE.CREATED,
+        });
       } else {
-        return res
-          .status(HTTP_STATUS_CODE.CREATED)
-          .json({ message: AUTH_MESSAGE.USER_ALREADY_EXISTS, user: users[0] });
+        return res.status(HTTP_STATUS_CODE.OK).json({
+          message: AUTH_MESSAGE.USER_ALREADY_EXISTS,
+          user: users[0],
+          status: HTTP_STATUS_CODE.FORBIDDEN,
+        });
       }
     }
 
@@ -47,11 +55,13 @@ export const createUser = async (
       return res.status(HTTP_STATUS_CODE.CREATED).json({
         message: AUTH_MESSAGE.USER_ALREADY_EXISTS,
         user: filteredUser[0],
+        status: HTTP_STATUS_CODE.FORBIDDEN,
       });
     }
   } catch (error) {
-    res
-      .status(HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR)
-      .json({ message: ERROR_MESSAGE.INTERNAL_SERVER_ERROR });
+    res.status(HTTP_STATUS_CODE.OK).json({
+      message: ERROR_MESSAGE.INTERNAL_SERVER_ERROR,
+      status: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+    });
   }
 };
