@@ -17,6 +17,13 @@ const UserSchema = new Schema({
     required: true,
     enum: [CREATED_AS.CUSTOMER, CREATED_AS.SELLER],
   },
+  sellerID: {
+    type: Schema.Types.ObjectId,
+    default: null,
+    required: function () {
+      return this.createdAs === CREATED_AS.CUSTOMER;
+    },
+  },
 });
 
 const User = mongoose.model("user", UserSchema);

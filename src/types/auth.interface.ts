@@ -4,7 +4,7 @@ import {
   ERROR_MESSAGE,
   HTTP_STATUS_CODE,
 } from "./shared.interface";
-import { Document } from "mongoose";
+import { Document, Types } from "mongoose";
 
 export enum AUTH_MESSAGE {
   USER_CREATED = "User created successfully",
@@ -26,4 +26,5 @@ export interface IUserDocument extends Document {
   name: string;
   email: string;
   createdAs: CREATED_AS;
+  sellerID?: Types.ObjectId | null;
 }
