@@ -58,7 +58,7 @@ export const searchSellerById = async (
       return res.status(HTTP_STATUS_CODE.OK).json({
         message: SELLER_MESSAGE.INVALID_PAYLOAD,
         status: HTTP_STATUS_CODE.BAD_REQUEST,
-        sellers: [],
+        seller: [],
       });
     }
 
@@ -66,7 +66,7 @@ export const searchSellerById = async (
       return res.status(HTTP_STATUS_CODE.OK).json({
         message: SELLER_MESSAGE.INVALID_PAYLOAD,
         status: HTTP_STATUS_CODE.BAD_REQUEST,
-        sellers: [],
+        seller: [],
       });
     }
 
@@ -78,7 +78,7 @@ export const searchSellerById = async (
     return res.status(HTTP_STATUS_CODE.OK).json({
       message: SELLER_MESSAGE.SELLERS_FETCHED,
       status: HTTP_STATUS_CODE.OK,
-      sellers: sellers,
+      seller: sellers,
     });
   } catch (error) {
     res.status(HTTP_STATUS_CODE.OK).json({

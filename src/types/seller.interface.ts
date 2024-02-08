@@ -68,5 +68,5 @@ export interface ISellerResponse {
   order?: ISellerOrderDocument;
   errors?: ValidationError;
   status?: HTTP_STATUS_CODE;
-  sellers?: IUserDocument[] | [];
+  seller?: IUserDocument[] | [];
 }
