@@ -17,15 +17,14 @@ export const createUser = async (
         email,
         name,
         createdAs,
+        sellerId: null,
       });
       await newUser.save();
-      return res
-        .status(HTTP_STATUS_CODE.CREATED)
-        .json({
-          message: AUTH_MESSAGE.USER_CREATED,
-          user: newUser,
-          status: HTTP_STATUS_CODE.CREATED,
-        });
+      return res.status(HTTP_STATUS_CODE.CREATED).json({
+        message: AUTH_MESSAGE.USER_CREATED,
+        user: newUser,
+        status: HTTP_STATUS_CODE.CREATED,
+      });
     }
 
     if (users.length === 1) {
@@ -34,6 +33,7 @@ export const createUser = async (
           email,
           name,
           createdAs,
+          sellerId: null,
         });
         await newUser.save();
         return res.status(HTTP_STATUS_CODE.CREATED).json({

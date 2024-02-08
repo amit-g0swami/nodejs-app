@@ -20,9 +20,6 @@ const UserSchema = new Schema({
   sellerId: {
     type: Schema.Types.ObjectId,
     default: null,
-    required: function () {
-      return this.createdAs === CREATED_AS.CUSTOMER;
-    },
   },
 });
 
