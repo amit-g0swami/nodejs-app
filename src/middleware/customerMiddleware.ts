@@ -46,12 +46,34 @@ export const customerMiddleware = async (
       });
     }
 
-    const user = await User.findById(sellerId);
+    const seller = await User.findById(sellerId);
+    const user = await User.findById(userId);
 
-    if (!user || user.createdAs !== CREATED_AS.SELLER) {
+    if (!seller || seller.createdAs !== CREATED_AS.SELLER) {
       return res.status(HTTP_STATUS_CODE.OK).json({
         message: CUSTOMER_MESSAGE.SELLER_NOT_FOUND,
         status: HTTP_STATUS_CODE.NOT_FOUND,
+      });
+    }
+
+    if (!user) {
+      return res.status(HTTP_STATUS_CODE.OK).json({
+        message: CUSTOMER_MESSAGE.USER_NOT_FOUND,
+        status: HTTP_STATUS_CODE.NOT_FOUND,
+      });
+    }
+
+    if (user.createdAs !== CREATED_AS.CUSTOMER) {
+      return res.status(HTTP_STATUS_CODE.OK).json({
+        message: CUSTOMER_MESSAGE.USER_NOT_FOUND,
+        status: HTTP_STATUS_CODE.FORBIDDEN,
+      });
+    }
+
+    if (user.sellerId === (seller as unknown)) {
+      return res.status(HTTP_STATUS_CODE.OK).json({
+        message: CUSTOMER_MESSAGE.INVALID_SELLER_ID,
+        status: HTTP_STATUS_CODE.CONFLICT,
       });
     }
 
