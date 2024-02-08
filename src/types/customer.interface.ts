@@ -1,6 +1,7 @@
 import { ValidationError } from "joi";
 import { ERROR_MESSAGE, HTTP_STATUS_CODE } from "./shared.interface";
 import { Document } from "mongoose";
+import { IUserDocument } from "./auth.interface";
 
 export enum CUSTOMER_MESSAGE {
   ADDRESS_CREATED = "Address created successfully",
@@ -34,4 +35,5 @@ export interface ICustomerResponse {
   address?: IAddressDocument | IAddressDocument[];
   errors?: ValidationError;
   status?: HTTP_STATUS_CODE;
+  user?: IUserDocument;
 }

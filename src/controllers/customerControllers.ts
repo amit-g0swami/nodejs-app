@@ -119,6 +119,7 @@ export const addSellerId = async (
     return res.status(HTTP_STATUS_CODE.OK).json({
       message: CUSTOMER_MESSAGE.SELLER_ID_ADDED_SUCCESSFULLY,
       status: HTTP_STATUS_CODE.UPDATED,
+      user: user,
     });
   } catch (error) {
     res.status(HTTP_STATUS_CODE.OK).json({
