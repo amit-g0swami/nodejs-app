@@ -46,10 +46,12 @@ export enum SELLER_MESSAGE {
   INVALID_SELLER_ID = 'Invalid Seller ID',
   SELLER_NOT_FOUND = 'Seller not found',
   INVALID_PAYLOAD = 'Invalid payload',
-  SELLERS_FETCHED = 'Sellers fetched successfully'
+  SELLERS_FETCHED = 'Sellers fetched successfully',
+  ORDERS_FETCHED = 'Orders fetched successfully'
 }
 
 export enum SELLER_ROUTE {
+  SELLER = '/seller',
   CREATE_ORDER = '/:id/order',
   SEARCH_SELLER_BY_ID = '/seller/:id'
 }
@@ -69,4 +71,13 @@ export interface ISellerResponse {
   errors?: ValidationError
   status?: HTTP_STATUS_CODE
   seller?: IUserDocument[] | []
+  orders?: ISellerOrderDocument[] | []
+}
+
+export interface ISellerQueryRequest {
+  filters: string
+}
+
+export interface IResBody {
+  id: string
 }

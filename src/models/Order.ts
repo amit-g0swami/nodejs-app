@@ -46,6 +46,10 @@ const OrderSchema = new Schema({
       required: true,
       enum: [PAYMENT_TYPE.COD, PAYMENT_TYPE.PREPAID]
     }
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
   }
 })
 

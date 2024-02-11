@@ -7,7 +7,12 @@ import {
   ERROR_MESSAGE,
   HTTP_STATUS_CODE
 } from '../types/shared.interface'
-import { ISellerResponse, SELLER_MESSAGE } from '../types/seller.interface'
+import {
+  IResBody,
+  ISellerQueryRequest,
+  ISellerResponse,
+  SELLER_MESSAGE
+} from '../types/seller.interface'
 
 export const createOrder = async (
   req: Request,
@@ -79,6 +84,56 @@ export const searchSellerById = async (
       message: SELLER_MESSAGE.SELLERS_FETCHED,
       status: HTTP_STATUS_CODE.OK,
       seller: sellers
+    })
+  } catch (error) {
+    res.status(HTTP_STATUS_CODE.OK).json({
+      message: ERROR_MESSAGE.INTERNAL_SERVER_ERROR,
+      status: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR
+    })
+  }
+}
+
+export const getOrdersByDate = async (
+  req: Request<{}, {}, IResBody, ISellerQueryRequest>,
+  res: Response<ISellerResponse>
+) => {
+  try {
+    const { filters } = req.query
+    const { id } = req.body
+
+    if (!filters) {
+      return res.status(HTTP_STATUS_CODE.OK).json({
+        message: SELLER_MESSAGE.INVALID_PAYLOAD,
+        status: HTTP_STATUS_CODE.BAD_REQUEST
+      })
+    }
+
+    const dateFilter = filters.split(':')[1]
+    const date = new Date(dateFilter)
+
+    const startDate = new Date(date)
+    startDate.setHours(0, 0, 0, 0)
+    const endDate = new Date(date)
+    endDate.setHours(23, 59, 59, 999)
+
+    const query = {
+      createdAt: {
+        $gte: startDate,
+        $lte: endDate
+      },
+      sellerId: id
+    }
+
+    const sellerOrders = await Order.find(query)
+    // const customerOrders = await Order.find(query)
+    const customerOrders = []
+
+    const orders = [...sellerOrders, ...customerOrders]
+
+    res.status(HTTP_STATUS_CODE.OK).json({
+      message: SELLER_MESSAGE.ORDERS_FETCHED,
+      status: HTTP_STATUS_CODE.OK,
+      orders
     })
   } catch (error) {
     res.status(HTTP_STATUS_CODE.OK).json({

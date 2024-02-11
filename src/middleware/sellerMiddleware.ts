@@ -8,7 +8,12 @@ import {
   HTTP_STATUS_CODE,
   PAYMENT_TYPE
 } from '../types/shared.interface'
-import { ISellerResponse, SELLER_MESSAGE } from '../types/seller.interface'
+import {
+  IResBody,
+  ISellerQueryRequest,
+  ISellerResponse,
+  SELLER_MESSAGE
+} from '../types/seller.interface'
 
 const orderSchema = Joi.object({
   buyerDetails: Joi.object({
@@ -83,6 +88,26 @@ export const sellerMiddleware = async (
       })
     }
 
+    next()
+  } catch (error: Error | any) {
+    const validationErrors = error.details.map(
+      (detail: ValidationError) => detail.message
+    )
+    return res.status(HTTP_STATUS_CODE.OK).json({
+      message: ERROR_MESSAGE.VALIDATION_ERROR,
+      errors: validationErrors,
+      status: HTTP_STATUS_CODE.BAD_REQUEST
+    })
+  }
+}
+
+export const sellerGetOrdersMiddleware = async (
+  req: Request<{}, {}, IResBody, ISellerQueryRequest>,
+  res: Response<ISellerResponse>,
+  next: NextFunction
+) => {
+  try {
+    await sellerIdSchema.validateAsync(req.body, { abortEarly: false })
     next()
   } catch (error: Error | any) {
     const validationErrors = error.details.map(
