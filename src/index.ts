@@ -34,4 +34,7 @@ connectToDB()
       console.log(`Server running on http://localhost:${port}`)
     )
   )
-  .catch((err) => console.log(err))
+  .catch((err) => {
+    console.error('Error connecting to the database:', err)
+    process.exit(1)
+  })
