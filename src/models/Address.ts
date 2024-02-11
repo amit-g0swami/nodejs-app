@@ -1,35 +1,35 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose'
 
-const { Schema } = mongoose;
+const { Schema } = mongoose
 
 const AddressSchema = new Schema({
   userId: {
     type: String,
-    required: true,
+    required: true
   },
   streetAddress: {
     type: String,
-    required: true,
+    required: true
   },
   city: {
     type: String,
-    required: true,
+    required: true
   },
   state: {
     type: String,
-    required: true,
+    required: true
   },
   zipCode: {
     type: Number,
     required: true,
-    validate: /^\d{6}$/,
+    validate: /^\d{6}$/
   },
   sellerId: {
     type: String,
-    required: true,
-  },
-});
+    required: true
+  }
+})
 
-const Address = mongoose.model("address", AddressSchema);
+const Address = mongoose.model('address', AddressSchema)
 
-export default Address;
+export default Address

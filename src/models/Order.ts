@@ -1,20 +1,20 @@
-import mongoose from "mongoose";
-import { PAYMENT_TYPE } from "../types/shared.interface";
+import mongoose from 'mongoose'
+import { PAYMENT_TYPE } from '../types/shared.interface'
 
-const { Schema } = mongoose;
+const { Schema } = mongoose
 
 const OrderSchema = new Schema({
   sellerId: {
     type: String,
-    required: true,
+    required: true
   },
   buyerDetails: {
     fullName: { type: String, required: true },
     email: {
       type: String,
-      required: true,
+      required: true
     },
-    mobileNumber: { type: String, required: true, validate: /^\d{10}$/ },
+    mobileNumber: { type: String, required: true, validate: /^\d{10}$/ }
   },
   orderPlaced: {
     completeAddress: { type: String, required: true },
@@ -22,33 +22,33 @@ const OrderSchema = new Schema({
     pinCode: { type: String, required: true, validate: /^\d{6}$/ },
     city: { type: String, required: true },
     state: { type: String, required: true },
-    country: { type: String, required: true },
+    country: { type: String, required: true }
   },
   orderDetails: [
     {
       productName: { type: String, required: true },
       quantity: { type: Number, required: true },
       unitPrice: { type: Number, required: true },
-      totalAmount: { type: Number, required: true },
-    },
+      totalAmount: { type: Number, required: true }
+    }
   ],
   packageDetails: {
     deadWeight: { type: Number, required: true },
     packageDimension: {
       length: { type: Number, required: true },
       width: { type: Number, required: true },
-      height: { type: Number, required: true },
-    },
+      height: { type: Number, required: true }
+    }
   },
   paymentDetails: {
     paymentMode: {
       type: String,
       required: true,
-      enum: [PAYMENT_TYPE.COD, PAYMENT_TYPE.PREPAID],
-    },
-  },
-});
+      enum: [PAYMENT_TYPE.COD, PAYMENT_TYPE.PREPAID]
+    }
+  }
+})
 
-const Order = mongoose.model("order", OrderSchema);
+const Order = mongoose.model('order', OrderSchema)
 
-export default Order;
+export default Order

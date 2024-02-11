@@ -1,20 +1,22 @@
-import Joi, { ValidationError } from "joi";
-import { NextFunction, Request, Response } from "express";
-import { Error } from "mongoose";
+import Joi, { ValidationError } from 'joi'
+import { NextFunction, Request, Response } from 'express'
 import {
   CREATED_AS,
   ERROR_MESSAGE,
-  HTTP_STATUS_CODE,
-} from "../types/shared.interface";
-import { IAuthResponse } from "../types/auth.interface";
+  HTTP_STATUS_CODE
+} from '../types/shared.interface'
+import { IAuthResponse } from '../types/auth.interface'
+
+const minLength = 3
+const maxLength = 30
 
 const authSchema = Joi.object({
   email: Joi.string().email().required(),
-  name: Joi.string().min(3).max(30).required(),
+  name: Joi.string().min(minLength).max(maxLength).required(),
   createdAs: Joi.string()
     .valid(CREATED_AS.CUSTOMER, CREATED_AS.SELLER)
-    .required(),
-});
+    .required()
+})
 
 export const authMiddleware = async (
   req: Request,
@@ -22,16 +24,16 @@ export const authMiddleware = async (
   next: NextFunction
 ) => {
   try {
-    await authSchema.validateAsync(req.body, { abortEarly: false });
-    next();
+    await authSchema.validateAsync(req.body, { abortEarly: false })
+    next()
   } catch (error: Error | any) {
     const validationErrors = error.details.map(
       (detail: ValidationError) => detail.message
-    );
+    )
     return res.status(HTTP_STATUS_CODE.OK).json({
       message: ERROR_MESSAGE.VALIDATION_ERROR,
       errors: validationErrors,
-      status: HTTP_STATUS_CODE.BAD_REQUEST,
-    });
+      status: HTTP_STATUS_CODE.BAD_REQUEST
+    })
   }
-};
+}
