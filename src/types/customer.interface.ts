@@ -5,7 +5,7 @@ import { IUserDataDocument } from './auth.interface'
 import { Document } from 'mongoose'
 
 export enum CUSTOMER_MESSAGE {
-  ORDER_CREATED = 'Address created successfully',
+  ORDER_CREATED = 'Order created successfully',
   INVALID_SELLER_ID = 'Invalid Seller ID',
   SELLER_NOT_FOUND = 'Seller not found',
   USER_ID_REQUIRED = 'User ID is required',
