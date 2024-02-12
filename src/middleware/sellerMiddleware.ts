@@ -25,7 +25,7 @@ const orderSchema = Joi.object({
   }).required(),
   orderPlaced: Joi.object({
     completeAddress: Joi.string().required(),
-    landMark: Joi.string().required(),
+    landMark: Joi.string(),
     pinCode: Joi.string()
       .pattern(/^\d{6}$/)
       .required(),
@@ -55,7 +55,8 @@ const orderSchema = Joi.object({
     paymentMode: Joi.string()
       .valid(PAYMENT_TYPE.COD, PAYMENT_TYPE.PREPAID)
       .required()
-  }).required()
+  }).required(),
+  isSavedToShiprocket: Joi.boolean()
 })
 
 const sellerIdSchema = Joi.object({

@@ -1,7 +1,6 @@
 import { ValidationError } from 'joi'
 import { ERROR_MESSAGE, HTTP_STATUS_CODE } from './shared.interface'
-import { Document } from 'mongoose'
-import { IUserDocument } from './auth.interface'
+import { ISellerOrderDocument } from './seller.interface'
 
 export enum CUSTOMER_MESSAGE {
   ADDRESS_CREATED = 'Address created successfully',
@@ -16,24 +15,22 @@ export enum CUSTOMER_MESSAGE {
 }
 
 export enum CUSTOMER_ROUTE {
-  GET_ADDRESS = '/address',
-  CREATE_ADDRESS = '/address/:id',
+  CREATE_ORDER = '/order/:id',
   ADD_SELLER_ID = '/:userId/sellerId'
 }
 
-export interface IAddressDocument extends Document {
-  streetAddress: string
-  city: string
-  state: string
-  zipCode: number
+interface IUserDocument {
   userId: string
-  sellerId: string
 }
+
+export interface ISellerOrderDocumentWithUserId
+  extends ISellerOrderDocument,
+    IUserDocument {}
 
 export interface ICustomerResponse {
   message: CUSTOMER_MESSAGE | ERROR_MESSAGE
-  address?: IAddressDocument | IAddressDocument[]
+  order?: any
   errors?: ValidationError
   status?: HTTP_STATUS_CODE
-  user?: IUserDocument
+  user?: IUserDocument | any
 }

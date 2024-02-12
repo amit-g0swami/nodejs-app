@@ -22,7 +22,7 @@ interface IBuyerDetails {
 
 interface IOrderPlaced {
   completeAddress: string
-  landMark: string
+  landMark?: string
   pinCode: string
   city: string
   state: string
@@ -63,15 +63,16 @@ export interface ISellerOrderDocument extends Document {
   orderPlaced?: IOrderPlaced | null
   packageDetails?: IPackageDetails | null
   paymentDetails?: { paymentMode: PAYMENT_TYPE } | null
+  isSavedToShiprocket: boolean
 }
 
 export interface ISellerResponse {
   message: SELLER_MESSAGE | ERROR_MESSAGE
-  order?: ISellerOrderDocument
+  order?: ISellerOrderDocument | any
   errors?: ValidationError
   status?: HTTP_STATUS_CODE
   seller?: IUserDocument[] | []
-  orders?: ISellerOrderDocument[] | []
+  orders?: ISellerOrderDocument[] | [] | any
 }
 
 export interface ISellerQueryRequest {

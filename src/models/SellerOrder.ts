@@ -3,7 +3,7 @@ import { PAYMENT_TYPE } from '../types/shared.interface'
 
 const { Schema } = mongoose
 
-const OrderSchema = new Schema({
+const SellerOrderSchema = new Schema({
   sellerId: {
     type: String,
     required: true
@@ -18,7 +18,7 @@ const OrderSchema = new Schema({
   },
   orderPlaced: {
     completeAddress: { type: String, required: true },
-    landMark: { type: String, required: true },
+    landMark: { type: String },
     pinCode: { type: String, required: true, validate: /^\d{6}$/ },
     city: { type: String, required: true },
     state: { type: String, required: true },
@@ -47,12 +47,16 @@ const OrderSchema = new Schema({
       enum: [PAYMENT_TYPE.COD, PAYMENT_TYPE.PREPAID]
     }
   },
+  isSavedToShiprocket: {
+    type: Boolean,
+    default: false
+  },
   createdAt: {
     type: Date,
     default: Date.now
   }
 })
 
-const Order = mongoose.model('order', OrderSchema)
+const SellerOrder = mongoose.model('sellerOrder', SellerOrderSchema)
 
-export default Order
+export default SellerOrder

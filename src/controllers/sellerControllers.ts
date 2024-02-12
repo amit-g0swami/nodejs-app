@@ -1,5 +1,4 @@
 import mongoose from 'mongoose'
-import Order from '../models/Order'
 import User from '../models/User'
 import { Request, Response } from 'express'
 import {
@@ -13,8 +12,9 @@ import {
   ISellerResponse,
   SELLER_MESSAGE
 } from '../types/seller.interface'
+import SellerOrder from '../models/SellerOrder'
 
-export const createOrder = async (
+export const createSellerOrder = async (
   req: Request,
   res: Response<ISellerResponse>
 ) => {
@@ -29,7 +29,7 @@ export const createOrder = async (
       paymentDetails
     } = req.body
 
-    const newOrder = new Order({
+    const newOrder = new SellerOrder({
       sellerId,
       buyerDetails,
       orderPlaced,
@@ -124,7 +124,7 @@ export const getOrdersByDate = async (
       sellerId: id
     }
 
-    const sellerOrders = await Order.find(query)
+    const sellerOrders = await SellerOrder.find(query)
     // const customerOrders = await Order.find(query)
     const customerOrders = []
 
