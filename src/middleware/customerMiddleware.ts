@@ -39,6 +39,13 @@ export const createCustomerMiddleware = async (
     const seller = await customerService.findUserById(sellerId)
     const user = await customerService.findUserById(userId)
 
+    if (!user.sellerId || user.sellerId.toString() !== seller._id.toString()) {
+      return res.status(HTTP_STATUS_CODE.OK).json({
+        message: CUSTOMER_MESSAGE.SELLER_NOT_ASSIGNED,
+        status: HTTP_STATUS_CODE.NOT_FOUND
+      })
+    }
+
     if (!seller || seller.createdAs !== CREATED_AS.SELLER) {
       return res.status(HTTP_STATUS_CODE.OK).json({
         message: CUSTOMER_MESSAGE.SELLER_NOT_FOUND,

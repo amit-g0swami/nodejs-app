@@ -11,7 +11,9 @@ export enum CUSTOMER_MESSAGE {
   USER_ID_REQUIRED = 'User ID is required',
   INVALID_PAYLOAD = 'Invalid payload',
   USER_NOT_FOUND = 'User not found',
-  SELLER_ID_ADDED_SUCCESSFULLY = 'Seller ID added successfully'
+  SELLER_ID_ADDED_SUCCESSFULLY = 'Seller ID added successfully',
+  SELLER_NOT_ASSIGNED = 'Seller not assigned',
+  SELLER_ALREADY_ASSIGNED = 'Seller already assigned'
 }
 
 export enum CUSTOMER_ROUTE {

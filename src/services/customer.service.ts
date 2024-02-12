@@ -11,7 +11,7 @@ import {
   CUSTOMER_MESSAGE,
   ICustomerResponse
 } from '../types/customer.interface'
-import { IUserData } from '../types/auth.interface'
+import { IUserData, IUserDataDocument } from '../types/auth.interface'
 import {
   IBuyerDetails,
   IOrderDetail,
@@ -19,8 +19,16 @@ import {
   IPackageDetails
 } from '../types/seller.interface'
 
-const findUserById = async (userId: string) => {
-  return await User.findById(userId)
+const findUserById = async (userId: string): Promise<IUserDataDocument> => {
+  try {
+    const user = await User.findById(userId)
+    if (!user) {
+      throw new Error()
+    }
+    return user
+  } catch (error) {
+    throw new Error(CUSTOMER_MESSAGE.USER_NOT_FOUND)
+  }
 }
 
 const validateSellerId = (sellerId: string) => {
