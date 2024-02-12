@@ -74,7 +74,7 @@ export const createCustomerMiddleware = async (
     )
     return res.status(HTTP_STATUS_CODE.OK).json({
       message: ERROR_MESSAGE.VALIDATION_ERROR,
-      errors: validationErrors || 'validation error',
+      errors: validationErrors,
       status: HTTP_STATUS_CODE.BAD_REQUEST
     })
   }

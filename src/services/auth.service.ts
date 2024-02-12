@@ -8,17 +8,13 @@ import {
 import { HTTP_STATUS_CODE } from '../types/shared.interface'
 
 const createUser = async (userData: IUserData): Promise<IAuthResponse> => {
-  try {
-    const newUser = new User(userData)
-    await newUser.validate()
-    await newUser.save()
-    return {
-      message: AUTH_MESSAGE.USER_CREATED,
-      user: newUser,
-      status: HTTP_STATUS_CODE.CREATED
-    }
-  } catch (error) {
-    throw new Error('Failed to create user: ' + error.message)
+  const newUser = new User(userData)
+  await newUser.validate()
+  await newUser.save()
+  return {
+    message: AUTH_MESSAGE.USER_CREATED,
+    user: newUser,
+    status: HTTP_STATUS_CODE.CREATED
   }
 }
 
