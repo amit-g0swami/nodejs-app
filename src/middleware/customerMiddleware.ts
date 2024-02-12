@@ -1,6 +1,5 @@
 import mongoose from 'mongoose'
 import User from '../models/User'
-import Address from '../models/CustomerOrder'
 import Joi, { ValidationError } from 'joi'
 import { Request, Response, NextFunction } from 'express'
 import {

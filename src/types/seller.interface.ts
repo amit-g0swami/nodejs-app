@@ -5,7 +5,7 @@ import {
   PAYMENT_TYPE
 } from './shared.interface'
 import { Document, Types } from 'mongoose'
-import { IUserDocument } from './auth.interface'
+import { IUserDataDocument } from './auth.interface'
 
 interface IOrderDetail {
   productName: string
@@ -71,7 +71,7 @@ export interface ISellerResponse {
   order?: ISellerOrderDocument | any
   errors?: ValidationError
   status?: HTTP_STATUS_CODE
-  seller?: IUserDocument[] | []
+  seller?: IUserDataDocument[] | []
   orders?: ISellerOrderDocument[] | [] | any
 }
 

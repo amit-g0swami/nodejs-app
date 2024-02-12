@@ -1,22 +1,8 @@
-import Joi, { ValidationError } from 'joi'
+import { ValidationError } from 'joi'
 import { NextFunction, Request, Response } from 'express'
-import {
-  CREATED_AS,
-  ERROR_MESSAGE,
-  HTTP_STATUS_CODE
-} from '../types/shared.interface'
+import { ERROR_MESSAGE, HTTP_STATUS_CODE } from '../types/shared.interface'
 import { IAuthResponse } from '../types/auth.interface'
-
-const minLength = 3
-const maxLength = 30
-
-const authSchema = Joi.object({
-  email: Joi.string().email().required(),
-  name: Joi.string().min(minLength).max(maxLength).required(),
-  createdAs: Joi.string()
-    .valid(CREATED_AS.CUSTOMER, CREATED_AS.SELLER)
-    .required()
-})
+import { authSchema } from '../schemas/auth.schema'
 
 export const authMiddleware = async (
   req: Request,

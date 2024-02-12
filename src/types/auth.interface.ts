@@ -11,16 +11,18 @@ export enum AUTH_ROUTE {
   LOGIN = '/login'
 }
 
-export interface IAuthResponse {
-  message: AUTH_MESSAGE | ERROR_MESSAGE
-  user?: IUserDocument | IUserDocument[]
-  errors?: ValidationError
-  status?: HTTP_STATUS_CODE
-}
-
-export interface IUserDocument extends Document {
+export interface IUserData {
   name: string
   email: string
   createdAs: CREATED_AS
-  sellerID?: Types.ObjectId | null
+  sellerId?: Types.ObjectId | null
+}
+
+export interface IUserDataDocument extends Document {}
+
+export interface IAuthResponse {
+  message: AUTH_MESSAGE | ERROR_MESSAGE
+  user?: IUserDataDocument | IUserDataDocument[]
+  errors?: ValidationError
+  status?: HTTP_STATUS_CODE
 }

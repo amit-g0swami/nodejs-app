@@ -2,17 +2,18 @@ import User from '../models/User'
 import { Request, Response } from 'express'
 import { ERROR_MESSAGE, HTTP_STATUS_CODE } from '../types/shared.interface'
 import { AUTH_MESSAGE, IAuthResponse } from '../types/auth.interface'
+import { authService } from '../services/auth.service'
 
 const zero = 0
 
-export const createUser = async (
+export const authController = async (
   req: Request,
   res: Response<IAuthResponse>
 ) => {
   try {
     const { email, name, createdAs } = req.body
 
-    const users = await User.find({ email })
+    const users = await authService.findUserByEmail(email)
 
     if (users.length === zero) {
       const newUser = new User({
@@ -21,7 +22,6 @@ export const createUser = async (
         createdAs,
         sellerId: null
       })
-      await newUser.save()
       return res.status(HTTP_STATUS_CODE.CREATED).json({
         message: AUTH_MESSAGE.USER_CREATED,
         user: newUser,
@@ -29,19 +29,18 @@ export const createUser = async (
       })
     }
 
-    const usersWithCreatedAs = await User.find({
+    const usersWithCreatedAs = await authService.findUserByEmailAndCreatedAs(
       email,
       createdAs
-    })
+    )
 
     if (usersWithCreatedAs.length === zero) {
-      const newUser = new User({
+      const newUser = await authService.createUser({
         email,
         name,
         createdAs,
         sellerId: null
       })
-      await newUser.save()
       return res.status(HTTP_STATUS_CODE.CREATED).json({
         message: AUTH_MESSAGE.USER_CREATED,
         user: newUser,
@@ -55,7 +54,7 @@ export const createUser = async (
       status: HTTP_STATUS_CODE.FORBIDDEN
     })
   } catch (error) {
-    res.status(HTTP_STATUS_CODE.OK).json({
+    res.status(HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR).json({
       message: ERROR_MESSAGE.INTERNAL_SERVER_ERROR,
       status: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR
     })

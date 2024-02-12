@@ -27,6 +27,7 @@ app.use(END_POINT.BASE_URL, customerRoutes)
 app.use(END_POINT.BASE_URL, sellerRoutes)
 
 const port = process.env.PORT
+const exitProcess = 1
 
 connectToDB()
   .then(() =>
@@ -36,5 +37,5 @@ connectToDB()
   )
   .catch((err) => {
     console.error('Error connecting to the database:', err)
-    process.exit(1)
+    process.exit(exitProcess)
   })
