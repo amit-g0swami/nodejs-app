@@ -7,38 +7,35 @@ import {
 import { Document, Types } from 'mongoose'
 import { IUserDataDocument } from './auth.interface'
 
-interface IOrderDetail {
+export interface IOrderDetail {
   productName: string
   quantity: number
   unitPrice: number
   totalAmount: number
 }
 
-interface IBuyerDetails {
+export interface IBuyerDetails {
   email: string
   fullName: string
   mobileNumber: string
 }
 
-interface IOrderPlaced {
+export interface IOrderPlaced {
   completeAddress: string
-  landMark?: string
+  landMark?: string | null
   pinCode: string
   city: string
   state: string
   country: string
 }
 
-interface IPackageDetails {
+export interface IPackageDetails {
   deadWeight: number
-  packageDimension?:
-    | {
-        length: number
-        width: number
-        height: number
-      }
-    | null
-    | undefined
+  packageDimension?: {
+    length: number
+    width: number
+    height: number
+  } | null
 }
 
 export enum SELLER_MESSAGE {
@@ -58,12 +55,12 @@ export enum SELLER_ROUTE {
 
 export interface ISellerOrderDocument extends Document {
   sellerId: string
-  orderDetails: Types.DocumentArray<IOrderDetail>
+  orderDetails?: IOrderDetail | null
   buyerDetails?: IBuyerDetails | null
   orderPlaced?: IOrderPlaced | null
   packageDetails?: IPackageDetails | null
   paymentDetails?: { paymentMode: PAYMENT_TYPE } | null
-  isSavedToShiprocket: boolean
+  isSavedToShiprocket?: boolean | null
 }
 
 export interface ISellerResponse {

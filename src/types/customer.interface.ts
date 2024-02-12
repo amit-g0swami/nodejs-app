@@ -1,13 +1,13 @@
 import { ValidationError } from 'joi'
 import { ERROR_MESSAGE, HTTP_STATUS_CODE } from './shared.interface'
 import { ISellerOrderDocument } from './seller.interface'
+import { IUserDataDocument } from './auth.interface'
+import { Document } from 'mongoose'
 
 export enum CUSTOMER_MESSAGE {
-  ADDRESS_CREATED = 'Address created successfully',
-  ADDRESS_FETCHED = 'Address fetched successfully',
+  ORDER_CREATED = 'Address created successfully',
   INVALID_SELLER_ID = 'Invalid Seller ID',
   SELLER_NOT_FOUND = 'Seller not found',
-  ADDRESS_ALREADY_SUBMITTED = 'Address already submitted',
   USER_ID_REQUIRED = 'User ID is required',
   INVALID_PAYLOAD = 'Invalid payload',
   USER_NOT_FOUND = 'User not found',
@@ -19,18 +19,14 @@ export enum CUSTOMER_ROUTE {
   ADD_SELLER_ID = '/:userId/sellerId'
 }
 
-interface IUserDocument {
+export interface ICreateCustomerOrder extends Document, ISellerOrderDocument {
   userId: string
 }
 
-export interface ISellerOrderDocumentWithUserId
-  extends ISellerOrderDocument,
-    IUserDocument {}
-
 export interface ICustomerResponse {
   message: CUSTOMER_MESSAGE | ERROR_MESSAGE
-  order?: any
+  order?: ICreateCustomerOrder
   errors?: ValidationError
   status?: HTTP_STATUS_CODE
-  user?: IUserDocument | any
+  user?: IUserDataDocument
 }

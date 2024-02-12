@@ -1,4 +1,3 @@
-import User from '../models/User'
 import { Request, Response } from 'express'
 import { ERROR_MESSAGE, HTTP_STATUS_CODE } from '../types/shared.interface'
 import { AUTH_MESSAGE, IAuthResponse } from '../types/auth.interface'
@@ -16,17 +15,14 @@ export const authController = async (
     const users = await authService.findUserByEmail(email)
 
     if (users.length === zero) {
-      const newUser = new User({
+      const createdUser = await authService.createUser({
         email,
         name,
         createdAs,
         sellerId: null
       })
-      return res.status(HTTP_STATUS_CODE.CREATED).json({
-        message: AUTH_MESSAGE.USER_CREATED,
-        user: newUser,
-        status: HTTP_STATUS_CODE.CREATED
-      })
+
+      return res.status(HTTP_STATUS_CODE.CREATED).json(createdUser)
     }
 
     const usersWithCreatedAs = await authService.findUserByEmailAndCreatedAs(
@@ -35,17 +31,13 @@ export const authController = async (
     )
 
     if (usersWithCreatedAs.length === zero) {
-      const newUser = await authService.createUser({
+      const createdUser = await authService.createUser({
         email,
         name,
         createdAs,
         sellerId: null
       })
-      return res.status(HTTP_STATUS_CODE.CREATED).json({
-        message: AUTH_MESSAGE.USER_CREATED,
-        user: newUser,
-        status: HTTP_STATUS_CODE.CREATED
-      })
+      return res.status(HTTP_STATUS_CODE.CREATED).json(createdUser)
     }
 
     return res.status(HTTP_STATUS_CODE.OK).json({

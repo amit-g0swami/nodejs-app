@@ -10,7 +10,7 @@ import {
   CUSTOMER_MESSAGE,
   ICustomerResponse
 } from '../types/customer.interface'
-import CustomerOrder from '../models/CustomerOrder'
+import { customerService } from '../services/customer.service'
 
 export const createCustomerOrder = async (
   req: Request,
@@ -18,33 +18,29 @@ export const createCustomerOrder = async (
 ) => {
   try {
     const sellerId = req.params.id
-    const userId = req.body.userId
 
     const {
+      userId,
       buyerDetails,
       orderPlaced,
       orderDetails,
       packageDetails,
-      paymentDetails
+      paymentDetails,
+      isSavedToShiprocket
     } = req.body
 
-    const newOrder = new CustomerOrder({
+    const createdOrder = await customerService.createCustomerOrder(
       userId,
       sellerId,
       buyerDetails,
       orderPlaced,
       orderDetails,
       packageDetails,
-      paymentDetails
-    })
+      paymentDetails,
+      isSavedToShiprocket
+    )
 
-    await newOrder.save()
-
-    res.status(HTTP_STATUS_CODE.CREATED).json({
-      message: CUSTOMER_MESSAGE.ADDRESS_CREATED,
-      order: newOrder,
-      status: HTTP_STATUS_CODE.CREATED
-    })
+    res.status(HTTP_STATUS_CODE.CREATED).json(createdOrder)
   } catch (error) {
     res.status(HTTP_STATUS_CODE.OK).json({
       message: ERROR_MESSAGE.INTERNAL_SERVER_ERROR,
@@ -69,8 +65,8 @@ export const addSellerId = async (
     }
 
     if (
-      !mongoose.Types.ObjectId.isValid(sellerId) ||
-      !mongoose.Types.ObjectId.isValid(userId)
+      !customerService.validateSellerId(sellerId) ||
+      !customerService.validateSellerId(userId)
     ) {
       return res.status(HTTP_STATUS_CODE.OK).json({
         message: CUSTOMER_MESSAGE.INVALID_PAYLOAD,
@@ -78,7 +74,7 @@ export const addSellerId = async (
       })
     }
 
-    const seller = await User.findById(sellerId)
+    const seller = await customerService.findUserById(sellerId)
     if (!seller || seller.createdAs !== CREATED_AS.SELLER) {
       return res.status(HTTP_STATUS_CODE.OK).json({
         message: CUSTOMER_MESSAGE.SELLER_NOT_FOUND,
@@ -86,7 +82,7 @@ export const addSellerId = async (
       })
     }
 
-    const user = await User.findById(userId)
+    const user = await customerService.findUserById(userId)
     if (!user || user.createdAs !== CREATED_AS.CUSTOMER) {
       return res.status(HTTP_STATUS_CODE.OK).json({
         message: CUSTOMER_MESSAGE.USER_NOT_FOUND,

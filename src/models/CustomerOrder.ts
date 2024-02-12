@@ -28,14 +28,12 @@ const CustomerOrderSchema = new Schema({
     state: { type: String, required: true },
     country: { type: String, required: true }
   },
-  orderDetails: [
-    {
-      productName: { type: String, required: true },
-      quantity: { type: Number, required: true },
-      unitPrice: { type: Number, required: true },
-      totalAmount: { type: Number, required: true }
-    }
-  ],
+  orderDetails: {
+    productName: { type: String, required: true },
+    quantity: { type: Number, required: true },
+    unitPrice: { type: Number, required: true },
+    totalAmount: { type: Number, required: true }
+  },
   packageDetails: {
     deadWeight: { type: Number, required: true },
     packageDimension: {

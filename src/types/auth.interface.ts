@@ -18,7 +18,7 @@ export interface IUserData {
   sellerId?: Types.ObjectId | null
 }
 
-export interface IUserDataDocument extends Document {}
+export interface IUserDataDocument extends Document, IUserData {}
 
 export interface IAuthResponse {
   message: AUTH_MESSAGE | ERROR_MESSAGE
