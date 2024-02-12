@@ -1,18 +1,19 @@
-import mongoose from 'mongoose'
-import User from '../models/User'
+import SellerOrder from '../models/SellerOrder'
 import { Request, Response } from 'express'
+import { ERROR_MESSAGE, HTTP_STATUS_CODE } from '../types/shared.interface'
 import {
-  CREATED_AS,
-  ERROR_MESSAGE,
-  HTTP_STATUS_CODE
-} from '../types/shared.interface'
-import {
-  IResBody,
+  ISellerResBody,
   ISellerQueryRequest,
   ISellerResponse,
   SELLER_MESSAGE
 } from '../types/seller.interface'
-import SellerOrder from '../models/SellerOrder'
+import { customerService } from '../services/customer.service'
+import {
+  findSellersById,
+  getDateRange,
+  getOrdersByQuery,
+  parseDateFilter
+} from '../services/seller.service'
 
 export const createSellerOrder = async (
   req: Request,
@@ -29,7 +30,7 @@ export const createSellerOrder = async (
       paymentDetails
     } = req.body
 
-    const newOrder = new SellerOrder({
+    const createdSellerOrder = new SellerOrder({
       sellerId,
       buyerDetails,
       orderPlaced,
@@ -38,10 +39,10 @@ export const createSellerOrder = async (
       paymentDetails
     })
 
-    await newOrder.save()
+    await createdSellerOrder.save()
     res.status(HTTP_STATUS_CODE.CREATED).json({
       message: SELLER_MESSAGE.ORDER_CREATED,
-      order: newOrder,
+      order: createdSellerOrder,
       status: HTTP_STATUS_CODE.CREATED
     })
   } catch (error) {
@@ -67,7 +68,7 @@ export const searchSellerById = async (
       })
     }
 
-    if (!mongoose.Types.ObjectId.isValid(sellerId)) {
+    if (!customerService.validateSellerId(sellerId)) {
       return res.status(HTTP_STATUS_CODE.OK).json({
         message: SELLER_MESSAGE.INVALID_PAYLOAD,
         status: HTTP_STATUS_CODE.BAD_REQUEST,
@@ -75,15 +76,12 @@ export const searchSellerById = async (
       })
     }
 
-    const sellers = await User.find({
-      _id: sellerId,
-      createdAs: CREATED_AS.SELLER
-    })
+    const searchedSellers = await findSellersById(sellerId)
 
     return res.status(HTTP_STATUS_CODE.OK).json({
       message: SELLER_MESSAGE.SELLERS_FETCHED,
       status: HTTP_STATUS_CODE.OK,
-      seller: sellers
+      seller: searchedSellers
     })
   } catch (error) {
     res.status(HTTP_STATUS_CODE.OK).json({
@@ -94,7 +92,7 @@ export const searchSellerById = async (
 }
 
 export const getOrdersByDate = async (
-  req: Request<{}, {}, IResBody, ISellerQueryRequest>,
+  req: Request<{}, {}, ISellerResBody, ISellerQueryRequest>,
   res: Response<ISellerResponse>
 ) => {
   try {
@@ -108,13 +106,8 @@ export const getOrdersByDate = async (
       })
     }
 
-    const dateFilter = filters.split(':')[1]
-    const date = new Date(dateFilter)
-
-    const startDate = new Date(date)
-    startDate.setHours(0, 0, 0, 0)
-    const endDate = new Date(date)
-    endDate.setHours(23, 59, 59, 999)
+    const date = parseDateFilter(filters)
+    const { startDate, endDate } = getDateRange(date)
 
     const query = {
       createdAt: {
@@ -124,11 +117,7 @@ export const getOrdersByDate = async (
       sellerId: id
     }
 
-    const sellerOrders = await SellerOrder.find(query)
-    // const customerOrders = await Order.find(query)
-    const customerOrders = []
-
-    const orders = [...sellerOrders, ...customerOrders]
+    const orders = await getOrdersByQuery(query)
 
     res.status(HTTP_STATUS_CODE.OK).json({
       message: SELLER_MESSAGE.ORDERS_FETCHED,

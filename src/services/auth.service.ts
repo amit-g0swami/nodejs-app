@@ -22,15 +22,15 @@ const createUser = async (userData: IUserData): Promise<IAuthResponse> => {
   }
 }
 
-const findUserByEmail = async (email: string): Promise<IUserDataDocument[]> => {
-  return await User.find({ email })
+const findUserByEmail = (email: string): Promise<IUserDataDocument[]> => {
+  return User.find({ email })
 }
 
-const findUserByEmailAndCreatedAs = async (
+const findUserByEmailAndCreatedAs = (
   email: string,
   createdAs: string
 ): Promise<IUserDataDocument[]> => {
-  return await User.find({ email, createdAs })
+  return User.find({ email, createdAs })
 }
 
 export const authService = {

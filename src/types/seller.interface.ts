@@ -4,7 +4,7 @@ import {
   HTTP_STATUS_CODE,
   PAYMENT_TYPE
 } from './shared.interface'
-import { Document, Types } from 'mongoose'
+import { Document } from 'mongoose'
 import { IUserDataDocument } from './auth.interface'
 
 export interface IOrderDetail {
@@ -65,17 +65,30 @@ export interface ISellerOrderDocument extends Document {
 
 export interface ISellerResponse {
   message: SELLER_MESSAGE | ERROR_MESSAGE
-  order?: ISellerOrderDocument | any
+  order?: ISellerOrderDocument
   errors?: ValidationError
   status?: HTTP_STATUS_CODE
   seller?: IUserDataDocument[] | []
-  orders?: ISellerOrderDocument[] | [] | any
+  orders?: ISellerOrderDocument[] | []
 }
 
 export interface ISellerQueryRequest {
   filters: string
 }
 
-export interface IResBody {
+export interface ISellerResBody {
   id: string
+}
+
+export interface IDateRange {
+  startDate: Date
+  endDate: Date
+}
+
+export interface ISearchSellerByIdQuery {
+  sellerId: string
+  createdAt: {
+    $gte: Date
+    $lte: Date
+  }
 }

@@ -39,13 +39,6 @@ export const createCustomerMiddleware = async (
     const seller = await customerService.findUserById(sellerId)
     const user = await customerService.findUserById(userId)
 
-    if (!user.sellerId || user.sellerId.toString() !== seller._id.toString()) {
-      return res.status(HTTP_STATUS_CODE.OK).json({
-        message: CUSTOMER_MESSAGE.SELLER_NOT_ASSIGNED,
-        status: HTTP_STATUS_CODE.NOT_FOUND
-      })
-    }
-
     if (!seller || seller.createdAs !== CREATED_AS.SELLER) {
       return res.status(HTTP_STATUS_CODE.OK).json({
         message: CUSTOMER_MESSAGE.SELLER_NOT_FOUND,
@@ -67,14 +60,21 @@ export const createCustomerMiddleware = async (
       })
     }
 
+    if (!user.sellerId || user.sellerId.toString() !== seller._id.toString()) {
+      return res.status(HTTP_STATUS_CODE.OK).json({
+        message: CUSTOMER_MESSAGE.SELLER_NOT_ASSIGNED,
+        status: HTTP_STATUS_CODE.NOT_FOUND
+      })
+    }
+
     next()
   } catch (error) {
-    const validationErrors = error.details.map(
+    const validationErrors = error?.details?.map(
       (detail: ValidationError) => detail.message
     )
     return res.status(HTTP_STATUS_CODE.OK).json({
       message: ERROR_MESSAGE.VALIDATION_ERROR,
-      errors: validationErrors,
+      errors: validationErrors || 'validation error',
       status: HTTP_STATUS_CODE.BAD_REQUEST
     })
   }

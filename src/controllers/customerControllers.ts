@@ -1,5 +1,3 @@
-import mongoose from 'mongoose'
-import User from '../models/User'
 import { Request, Response } from 'express'
 import {
   CREATED_AS,
@@ -84,17 +82,17 @@ export const addSellerId = async (
 
     const user = await customerService.findUserById(userId)
 
-    if (user.sellerId) {
-      return res.status(HTTP_STATUS_CODE.OK).json({
-        message: CUSTOMER_MESSAGE.SELLER_ALREADY_ASSIGNED,
-        status: HTTP_STATUS_CODE.BAD_REQUEST
-      })
-    }
-
     if (!user || user.createdAs !== CREATED_AS.CUSTOMER) {
       return res.status(HTTP_STATUS_CODE.OK).json({
         message: CUSTOMER_MESSAGE.USER_NOT_FOUND,
         status: HTTP_STATUS_CODE.NOT_FOUND
+      })
+    }
+
+    if (user.sellerId) {
+      return res.status(HTTP_STATUS_CODE.OK).json({
+        message: CUSTOMER_MESSAGE.SELLER_ALREADY_ASSIGNED,
+        status: HTTP_STATUS_CODE.BAD_REQUEST
       })
     }
 

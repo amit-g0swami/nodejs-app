@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import {
-  sellerGetOrdersMiddleware,
-  sellerMiddleware
+  createSellerOrderMiddleware,
+  sellerGetOrdersMiddleware
 } from '../middleware/sellerMiddleware'
 import {
   createSellerOrder,
@@ -12,7 +12,11 @@ import { SELLER_ROUTE } from '../types/seller.interface'
 
 const router = Router()
 
-router.post(SELLER_ROUTE.CREATE_ORDER, sellerMiddleware, createSellerOrder)
+router.post(
+  SELLER_ROUTE.CREATE_ORDER,
+  createSellerOrderMiddleware,
+  createSellerOrder
+)
 router.get(SELLER_ROUTE.SEARCH_SELLER_BY_ID, searchSellerById)
 router.get(SELLER_ROUTE.SELLER, sellerGetOrdersMiddleware, getOrdersByDate)
 

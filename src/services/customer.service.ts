@@ -2,7 +2,6 @@ import mongoose from 'mongoose'
 import User from '../models/User'
 import {
   CREATED_AS,
-  ERROR_MESSAGE,
   HTTP_STATUS_CODE,
   PAYMENT_TYPE
 } from '../types/shared.interface'
@@ -19,16 +18,11 @@ import {
   IPackageDetails
 } from '../types/seller.interface'
 
-const findUserById = async (userId: string): Promise<IUserDataDocument> => {
-  try {
-    const user = await User.findById(userId)
-    if (!user) {
-      throw new Error()
-    }
-    return user
-  } catch (error) {
-    throw new Error(CUSTOMER_MESSAGE.USER_NOT_FOUND)
-  }
+const findUserById = async (
+  userId: string
+): Promise<IUserDataDocument | null> => {
+  const user = await User.findById(userId)
+  return user
 }
 
 const validateSellerId = (sellerId: string) => {
@@ -49,27 +43,23 @@ const createCustomerOrder = async (
   paymentDetails: { paymentMode: PAYMENT_TYPE },
   isSavedToShiprocket: boolean
 ): Promise<ICustomerResponse> => {
-  try {
-    const createdOrder = new CustomerOrder({
-      userId,
-      sellerId,
-      buyerDetails,
-      orderPlaced,
-      orderDetails,
-      packageDetails,
-      paymentDetails,
-      isSavedToShiprocket
-    })
+  const createdOrder = new CustomerOrder({
+    userId,
+    sellerId,
+    buyerDetails,
+    orderPlaced,
+    orderDetails,
+    packageDetails,
+    paymentDetails,
+    isSavedToShiprocket
+  })
 
-    await createdOrder.save()
+  await createdOrder.save()
 
-    return {
-      message: CUSTOMER_MESSAGE.ORDER_CREATED,
-      order: createdOrder,
-      status: HTTP_STATUS_CODE.CREATED
-    }
-  } catch (error) {
-    throw new Error(ERROR_MESSAGE.INTERNAL_SERVER_ERROR)
+  return {
+    message: CUSTOMER_MESSAGE.ORDER_CREATED,
+    order: createdOrder,
+    status: HTTP_STATUS_CODE.CREATED
   }
 }
 
