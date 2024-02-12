@@ -60,7 +60,7 @@ export const sellerGetOrdersMiddleware = async (
   next: NextFunction
 ) => {
   try {
-    await sellerIdSchema.validateAsync(req.body, { abortEarly: false })
+    await sellerIdSchema.validateAsync(req.params, { abortEarly: false })
     next()
   } catch (error: Error | any) {
     const validationErrors = error.details.map(

@@ -92,14 +92,21 @@ export const searchSellerById = async (
 }
 
 export const getOrdersByDate = async (
-  req: Request<{}, {}, ISellerResBody, ISellerQueryRequest>,
+  req: Request<
+    {
+      id: string
+    },
+    {},
+    ISellerResBody,
+    ISellerQueryRequest
+  >,
   res: Response<ISellerResponse>
 ) => {
   try {
-    const { filters } = req.query
-    const { id } = req.body
+    const id = req.params.id
+    const filters = req.query.filters
 
-    if (!filters) {
+    if (!filters || !id) {
       return res.status(HTTP_STATUS_CODE.OK).json({
         message: SELLER_MESSAGE.INVALID_PAYLOAD,
         status: HTTP_STATUS_CODE.BAD_REQUEST

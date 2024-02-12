@@ -48,7 +48,7 @@ export enum SELLER_MESSAGE {
 }
 
 export enum SELLER_ROUTE {
-  SELLER = '/seller',
+  GET_SELLER_ORDERS = '/seller/:id/orders',
   CREATE_ORDER = '/:id/order',
   SEARCH_SELLER_BY_ID = '/seller/:id'
 }
@@ -74,6 +74,7 @@ export interface ISellerResponse {
 
 export interface ISellerQueryRequest {
   filters: string
+  id: string
 }
 
 export interface ISellerResBody {

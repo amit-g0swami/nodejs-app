@@ -18,6 +18,10 @@ router.post(
   createSellerOrder
 )
 router.get(SELLER_ROUTE.SEARCH_SELLER_BY_ID, searchSellerById)
-router.get(SELLER_ROUTE.SELLER, sellerGetOrdersMiddleware, getOrdersByDate)
+router.get(
+  SELLER_ROUTE.GET_SELLER_ORDERS,
+  sellerGetOrdersMiddleware,
+  getOrdersByDate
+)
 
 export default router
