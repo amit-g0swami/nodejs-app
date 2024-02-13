@@ -30,7 +30,8 @@ export const sellerCreateOrderSchema = Joi.object({
     packageDimension: Joi.object({
       length: Joi.number().required(),
       width: Joi.number().required(),
-      height: Joi.number().required()
+      height: Joi.number().required(),
+      applicableWeight: Joi.number().required()
     }).required()
   }).required(),
   paymentDetails: Joi.object({

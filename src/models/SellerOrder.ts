@@ -35,7 +35,8 @@ const SellerOrderSchema = new Schema({
     packageDimension: {
       length: { type: Number, required: true },
       width: { type: Number, required: true },
-      height: { type: Number, required: true }
+      height: { type: Number, required: true },
+      applicableWeight: { type: Number, required: true }
     }
   },
   paymentDetails: {
