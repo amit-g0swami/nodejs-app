@@ -2,6 +2,7 @@ import SellerOrder from '../models/SellerOrder'
 import { Request, Response } from 'express'
 import { ERROR_MESSAGE, HTTP_STATUS_CODE } from '../types/shared.interface'
 import {
+  ISearchSellerByIdQuery,
   ISellerQueryRequest,
   ISellerReqParams,
   ISellerResponse,
@@ -10,9 +11,9 @@ import {
 import { customerService } from '../services/customer.service'
 import {
   findSellersById,
-  getDateRange,
   getOrdersByQuery,
-  parseDateFilter
+  parseDateFilter,
+  validateGetOrderByDatePayload
 } from '../services/seller.service'
 
 export const createSellerOrder = async (
@@ -99,22 +100,27 @@ export const getOrdersByDate = async (
     const id = req.params.id
     const filters = req.query.filters
 
-    if (!filters || !id) {
+    if (!validateGetOrderByDatePayload(id, filters)) {
       return res.status(HTTP_STATUS_CODE.OK).json({
         message: SELLER_MESSAGE.INVALID_PAYLOAD,
         status: HTTP_STATUS_CODE.BAD_REQUEST
       })
     }
 
-    const date = parseDateFilter(filters)
-    const { startDate, endDate } = getDateRange(date)
+    const dateRange = parseDateFilter(filters)
 
-    const query = {
-      createdAt: {
-        $gte: startDate,
-        $lte: endDate
-      },
-      sellerId: id
+    if (!dateRange) {
+      return res.status(HTTP_STATUS_CODE.OK).json({
+        message: SELLER_MESSAGE.INVALID_DATE_RANGE,
+        status: HTTP_STATUS_CODE.BAD_REQUEST
+      })
+    }
+
+    const [startDate, endDate] = dateRange
+
+    const query: ISearchSellerByIdQuery = {
+      sellerId: id,
+      createdAt: { $gte: startDate, $lte: endDate }
     }
 
     const orders = await getOrdersByQuery(query)

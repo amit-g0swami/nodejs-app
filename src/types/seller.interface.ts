@@ -44,7 +44,8 @@ export enum SELLER_MESSAGE {
   SELLER_NOT_FOUND = 'Seller not found',
   INVALID_PAYLOAD = 'Invalid payload',
   SELLERS_FETCHED = 'Sellers fetched successfully',
-  ORDERS_FETCHED = 'Orders fetched successfully'
+  ORDERS_FETCHED = 'Orders fetched successfully',
+  INVALID_DATE_RANGE = 'Invalid date range'
 }
 
 export enum SELLER_ROUTE {
@@ -78,11 +79,6 @@ export interface ISellerQueryRequest {
 
 export interface ISellerReqParams {
   id: string
-}
-
-export interface IDateRange {
-  startDate: Date
-  endDate: Date
 }
 
 export interface ISearchSellerByIdQuery {
