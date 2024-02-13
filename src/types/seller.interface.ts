@@ -74,10 +74,9 @@ export interface ISellerResponse {
 
 export interface ISellerQueryRequest {
   filters: string
-  id: string
 }
 
-export interface ISellerResBody {
+export interface ISellerReqParams {
   id: string
 }
 

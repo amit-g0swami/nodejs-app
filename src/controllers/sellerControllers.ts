@@ -2,8 +2,8 @@ import SellerOrder from '../models/SellerOrder'
 import { Request, Response } from 'express'
 import { ERROR_MESSAGE, HTTP_STATUS_CODE } from '../types/shared.interface'
 import {
-  ISellerResBody,
   ISellerQueryRequest,
+  ISellerReqParams,
   ISellerResponse,
   SELLER_MESSAGE
 } from '../types/seller.interface'
@@ -92,14 +92,7 @@ export const searchSellerById = async (
 }
 
 export const getOrdersByDate = async (
-  req: Request<
-    {
-      id: string
-    },
-    {},
-    ISellerResBody,
-    ISellerQueryRequest
-  >,
+  req: Request<ISellerReqParams, {}, {}, ISellerQueryRequest>,
   res: Response<ISellerResponse>
 ) => {
   try {

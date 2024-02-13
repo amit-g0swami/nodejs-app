@@ -6,8 +6,8 @@ import {
   HTTP_STATUS_CODE
 } from '../types/shared.interface'
 import {
-  ISellerResBody,
   ISellerQueryRequest,
+  ISellerReqParams,
   ISellerResponse,
   SELLER_MESSAGE
 } from '../types/seller.interface'
@@ -55,7 +55,7 @@ export const createSellerOrderMiddleware = async (
 }
 
 export const sellerGetOrdersMiddleware = async (
-  req: Request<{}, {}, ISellerResBody, ISellerQueryRequest>,
+  req: Request<ISellerReqParams, {}, {}, ISellerQueryRequest>,
   res: Response<ISellerResponse>,
   next: NextFunction
 ) => {
