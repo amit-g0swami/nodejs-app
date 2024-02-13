@@ -56,7 +56,7 @@ export const createCustomerMiddleware = async (
     if (!customerService.validateUserType(user)) {
       return res.status(HTTP_STATUS_CODE.OK).json({
         message: CUSTOMER_MESSAGE.USER_NOT_FOUND,
-        status: HTTP_STATUS_CODE.FORBIDDEN
+        status: HTTP_STATUS_CODE.NOT_FOUND
       })
     }
 

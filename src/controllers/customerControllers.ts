@@ -92,7 +92,7 @@ export const addSellerId = async (
     if (user.sellerId) {
       return res.status(HTTP_STATUS_CODE.OK).json({
         message: CUSTOMER_MESSAGE.SELLER_ALREADY_ASSIGNED,
-        status: HTTP_STATUS_CODE.BAD_REQUEST
+        status: HTTP_STATUS_CODE.OK
       })
     }
 
