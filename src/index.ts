@@ -8,6 +8,7 @@ import customerRoutes from './routes/customerRoutes'
 import sellerRoutes from './routes/sellerRoutes'
 import connectToDB from './config/database'
 import { END_POINT } from './types/shared.interface'
+import { Logger } from './logger/logger.lib'
 
 dotenv.config()
 const app = express()
@@ -32,10 +33,10 @@ const exitProcess = 1
 connectToDB()
   .then(() =>
     app.listen(port, () =>
-      console.log(`Server running on http://localhost:${port}`)
+      Logger.info(`Server running on http://localhost:${port}`)
     )
   )
   .catch((err) => {
-    console.error('Error connecting to the database:', err)
+    Logger.error('Error connecting to the database:', err)
     process.exit(exitProcess)
   })
