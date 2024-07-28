@@ -29,13 +29,15 @@ export interface IOrderPlaced {
   country: string
 }
 
+export interface IPackageDimension {
+  length: number
+  width: number
+  height: number
+}
+
 export interface IPackageDetails {
   deadWeight: number
-  packageDimension?: {
-    length: number
-    width: number
-    height: number
-  } | null
+  packageDimension?: IPackageDimension | null
 }
 
 export enum SELLER_MESSAGE {

@@ -55,12 +55,7 @@ export const addSellerId = async (
     const { userId } = req.params
     const { sellerId } = req.body
 
-    if (!userId || !sellerId) {
-      return res.status(HTTP_STATUS_CODE.OK).json({
-        message: CUSTOMER_MESSAGE.INVALID_PAYLOAD,
-        status: HTTP_STATUS_CODE.BAD_REQUEST
-      })
-    }
+    customerService.isUserIdAndSellerIdExist(userId, sellerId, res)
 
     if (
       !customerService.validateSellerId(sellerId) ||
@@ -73,6 +68,7 @@ export const addSellerId = async (
     }
 
     const seller = await customerService.findUserById(sellerId)
+
     if (!seller || seller.createdAs !== CREATED_AS.SELLER) {
       return res.status(HTTP_STATUS_CODE.OK).json({
         message: CUSTOMER_MESSAGE.SELLER_NOT_FOUND,

@@ -6,6 +6,7 @@ import {
   PAYMENT_TYPE
 } from '../types/shared.interface'
 import CustomerOrder from '../models/CustomerOrder'
+import { Response } from 'express'
 import {
   CUSTOMER_MESSAGE,
   ICustomerResponse
@@ -63,9 +64,23 @@ const createCustomerOrder = async (
   }
 }
 
+const isUserIdAndSellerIdExist = <T>(
+  userId: string,
+  sellerId: string,
+  res: Response<T>
+) => {
+  if (!userId || !sellerId) {
+    return res.status(HTTP_STATUS_CODE.OK).json({
+      message: CUSTOMER_MESSAGE.INVALID_PAYLOAD,
+      status: HTTP_STATUS_CODE.BAD_REQUEST
+    } as T)
+  }
+}
+
 export const customerService = {
   findUserById,
   validateSellerId,
   validateUserType,
-  createCustomerOrder
+  createCustomerOrder,
+  isUserIdAndSellerIdExist
 }
