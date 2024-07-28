@@ -26,7 +26,9 @@ export const parseDateFilter = (filter: string): [Date, Date] | null => {
   if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
     return null
   }
+  // eslint-disable-next-line no-magic-numbers
   startDate.setHours(0, 0, 0, 0)
+  // eslint-disable-next-line no-magic-numbers
   endDate.setHours(23, 59, 59, 999)
   return [startDate, endDate]
 }
